@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!--
+    Used to launch nodes for SLAM
+-->
+<launch>
+    <include file="$(find navigator_bringup)/launch/robot_standalone.launch"/>
+    <include file="$(find navigator_bringup)/launch/mapping.launch"/>
+</launch>

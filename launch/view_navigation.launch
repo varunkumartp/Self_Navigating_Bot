@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!--
+  Launches the Rviz 
+-->
+<launch>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find navigator_bringup)/rviz/robot_mapping.rviz" />
+</launch>
