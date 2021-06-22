@@ -3,7 +3,7 @@
     Used to launch multiple launch files during autonomous navigation
 -->
 <launch>
-    <include file="$(find navigator_bringup)/launch/robot_standalone2.launch"/>
+    <include file="$(find navigator_bringup)/launch/robot_standalone.launch"/>
     <include file="$(find navigator_bringup)/launch/amcl_demo.launch"/>
     <include file="$(find navigator_bringup)/launch/view_navigation.launch"/>
 </launch>

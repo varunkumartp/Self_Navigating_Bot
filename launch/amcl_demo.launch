@@ -9,7 +9,7 @@
   </include>
 
   <!-- Map server -->
-  <arg name="map_file" default="$(find navigator_bringup)/maps/map.yaml"/> 
+  <arg name="map_file" default="$(find navigator_bringup)/maps/mymap4.yaml"/> 
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
   <!-- AMCL -->
@@ -24,9 +24,9 @@
   </include>
 
   <!-- Move base -->
-  <arg name="custom_param_file" default="$(find navigator_bringup)/param3/kinect_costmap_params.yaml"/>
+  <!-- <arg name="custom_param_file" default="$(find navigator_bringup)/param3/kinect_costmap_params.yaml"/> -->
   <include file="$(find navigator_bringup)/launch/includes/move_base.launch.xml">
-    <arg name="custom_param_file" value="$(arg custom_param_file)"/>
+    <!-- <arg name="custom_param_file" value="$(arg custom_param_file)"/> -->
   </include>
 
 </launch>
