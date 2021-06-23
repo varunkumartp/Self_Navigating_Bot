@@ -3,9 +3,6 @@
 #include <ros.h>
 #include <std_msgs/Float64.h>
 
-float latitude;
-float longitude;
-
 //Ros Node
 ros::NodeHandle  nh;
 
@@ -24,7 +21,6 @@ TinyGPS gps;
 
 void setup()
 {
-  Serial.begin(57600);
   nh.initNode();
   nh.advertise(latPub);
   nh.advertise(lonPub);
@@ -38,10 +34,6 @@ void loop()
     if (gps.encode(gpsSerial.read()))
     {
       gps.f_get_position(&lat.data, &lon.data); // get latitude and longitude
-      //      Serial.print(lat.data);
-      //      Serial.print(" -- ");
-      //      Serial.println(lon.data);
-
       latPub.publish(&lat);
       delay(1);
       lonPub.publish(&lon);
@@ -49,7 +41,6 @@ void loop()
     }
     nh.spinOnce();
     delay(1);
-
   }
   nh.spinOnce();
   delay(1);
