@@ -37,31 +37,9 @@ void print_Values (int16_t *gyro, int16_t *accel, int32_t *quat, uint32_t *times
   Quaternion q;
   mpu.GetQuaternion(&q, quat);
   qx.data = q.x;
-  qy.data = -q.y;
-  qz.data = -q.z;
+  qy.data = q.y;
+  qz.data = q.z;
   qw.data = q.w;
-  delay(1);
-  qxPub.publish(&qx);
-  qyPub.publish(&qy);
-  qzPub.publish(&qz);
-  qwPub.publish(&qw);
-}
-
-void check()
-{
-  if (gpsSerial.available()) // check for gps data
-  {
-    if (gps.encode(gpsSerial.read()))
-      gps.f_get_position(&lat.data, &lon.data); // get latitude and longitude
-  }
-  else
-  {
-    lat.data = 0;
-    lon.data = 0;
-  }
-  delay(1);
-  latPub.publish(&lat);
-  lonPub.publish(&lon);
 }
 
 void setup()
@@ -82,7 +60,17 @@ void setup()
 void loop()
 {
   mpu.dmp_read_fifo();
-  check();
+  if (gpsSerial.available()) // check for gps data
+  {
+    if (gps.encode(gpsSerial.read()))
+      gps.f_get_position(&lat.data, &lon.data); // get latitude and longitude
+  }
+  qxPub.publish(&qx);
+  qyPub.publish(&qy);
+  qzPub.publish(&qz);
+  qwPub.publish(&qw);
+  latPub.publish(&lat);
+  lonPub.publish(&lon);
   nh.spinOnce();
-  delay(10);
+  delay(100);
 }

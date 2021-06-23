@@ -196,11 +196,14 @@ ISR(TIMER1_COMPA_vect)  // timer interrupt
   }
   sendPulse(e2, lpwm_pulse);
   sendPulse(e1, rpwm_pulse);
-  USSL.data = checkDistance(echol);
+//  USSL.data = checkDistance(echol);
+  USSL.data = 0.0;
   delay(30);
-  USSC.data = checkDistance(echoc);
+//  USSC.data = checkDistance(echoc);
+  USSC.data = 0.0;
   delay(30);
-  USSR.data = checkDistance(echor);
+//  USSR.data = checkDistance(echor);
+  USSR.data = 0.0;
   delay(30);
   leftPub.publish(&USSL);
   delay(1);
