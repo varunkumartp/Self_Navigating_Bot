@@ -71,6 +71,4 @@ void loop()
 {
   mpu.dmp_read_fifo();
   check();
-  nh.spinOnce();
-  delay(1);
 }
