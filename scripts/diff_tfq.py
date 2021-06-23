@@ -1,20 +1,24 @@
 #!/usr/bin/env python
 
+# Converts encoder ticks from wheel to odometry
+# Uses quaternions from MPU6050 for orientationr
+
 import rospy
-from math import sin, cos, pi, asin
+from math import sin, cos
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Int16
 from geometry_msgs.msg import Quaternion
 from tf.broadcaster import TransformBroadcaster
 import numpy as np
+
 #############################################################################
-class DiffTf:
+class DiffTfq:
 #############################################################################
 
     #############################################################################
     def __init__(self):
     #############################################################################
-        rospy.init_node("diff_tf")
+        rospy.init_node("diff_tfq")
         self.nodename = rospy.get_name()
         rospy.loginfo("-I- %s started" % self.nodename)  #10260
         
@@ -48,8 +52,7 @@ class DiffTf:
         self.th = 0
         self.dx = 0                 # speeds in x/rotation
         self.dr = 0
-        self.prev_th = 0
-        self.quaternion = Quaternion(0,0,0,1)
+        self.quaternion = Quaternion()
         self.then = rospy.Time.now()
         
         # subscriptions
@@ -90,8 +93,8 @@ class DiffTf:
            
             # distance traveled is the average of the two wheels 
             d = ( d_left + d_right ) / 2
+            
             # this approximation works (in radians) for small angles
-
             th = ( d_right - d_left ) / self.base_width
             
             # calculate velocities
@@ -116,6 +119,7 @@ class DiffTf:
                 self.base_frame_id,
                 self.odom_frame_id
                 )
+            
             odom = Odometry()
             odom.header.stamp = now
             odom.header.frame_id = self.odom_frame_id
@@ -128,7 +132,7 @@ class DiffTf:
             odom.twist.twist.linear.y = 0
             odom.twist.twist.angular.z = self.dr
             self.odomPub.publish(odom)
-            
+
     #############################################################################
     def quatCallback(self, msg):
     #############################################################################
@@ -137,7 +141,6 @@ class DiffTf:
         self.quaternion.y = -qArray[1]
         self.quaternion.z = -qArray[2]
         self.quaternion.w = qArray[3]
-        
     
     #############################################################################
     def lwheelCallback(self, msg):
@@ -169,7 +172,7 @@ class DiffTf:
 #############################################################################
 if __name__ == '__main__':
     """ main """
-    diffTf = DiffTf()
+    diffTf = DiffTfq()
     diffTf.spin()
     
     

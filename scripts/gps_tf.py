@@ -4,6 +4,7 @@ import rospy
 from std_msgs.msg import Float32
 from sensor_msgs.msg import NavSatFix
 from geometry_msgs.msg import Quaternion, PoseStamped
+import numpy as np
 
 #############################################################################
 class gps_tf:
@@ -31,10 +32,7 @@ class gps_tf:
         # subscriptions
         rospy.Subscriber("lat", Float32, self.latCallback)
         rospy.Subscriber("lon", Float32, self.lonCallback)
-        rospy.Subscriber("qx", Float32, self.qxCallback)
-        rospy.Subscriber("qy", Float32, self.qyCallback)
-        rospy.Subscriber("qz", Float32, self.qzCallback)
-        rospy.Subscriber("qw", Float32, self.qwCallback)
+        rospy.Subscriber("quaternion", Quaternion, self.quatCallback)
         
         #Publishers
         self.gps_goal_fix = rospy.Publisher("gps_goal_fix", NavSatFix, queue_size = 10)
@@ -81,24 +79,13 @@ class gps_tf:
             
 
     #############################################################################
-    def qxCallback(self, msg):
+    def quatCallback(self, msg):
     #############################################################################
-        self.quaternion.x = msg.data
-    
-    #############################################################################
-    def qyCallback(self, msg):
-    #############################################################################
-        self.quaternion.y = msg.data
-    
-    #############################################################################
-    def qzCallback(self, msg):
-    #############################################################################
-        self.quaternion.z = msg.data
-    
-    #############################################################################
-    def qwCallback(self, msg):
-    #############################################################################
-        self.quaternion.w = msg.data
+        qArray = [msg.x, msg.y, msg.z, msg.w]/np.linalg.norm([msg.x, msg.y, msg.z, msg.w])
+        self.quaternion.x = qArray[0]
+        self.quaternion.y = -qArray[1]
+        self.quaternion.z = -qArray[2]
+        self.quaternion.w = qArray[3]
     
     #############################################################################
     def latCallback(self, msg):

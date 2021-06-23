@@ -11,18 +11,18 @@
   <rosparam param="base_width">0.24</rosparam>
   <rosparam param="ticks_meter">96</rosparam>
   
-  <node pkg="navigator_bringup"     type="twist_to_motors.py"    name="twist_to_motors" output="screen"/>
-  <node pkg="navigator_bringup"     type="diff_tfq.py"            name="diff_tf"         output="screen"/> 
-  <!-- <node pkg="navigator_bringup"     type="gps_tf.py"             name="gps_tf"          output="screen"/>  -->
-  <node pkg="rosserial_python"     type="serial_node.py"         name="serial_nano"     output="screen">
+  <!-- Use this when an IMU is used for orientation-->
+  <node pkg="navigator_bringup"     type="diff_tfq.py"            name="diff_tf"         output="screen"/>
+  <!-- Use this when only encoder ticks are used for orientation -->
+  <node pkg="navigator_bringup"     type="diff_tf.py"             name="diff_tf"         output="screen"/> 
+  <node pkg="navigator_bringup"     type="twist_to_motors.py"     name="twist_to_motors" output="screen"/>
+  <node pkg="rosserial_python"      type="serial_node.py"         name="serial_nano"     output="screen">
     <param name="port"  value="/dev/ttyUSB0"/>
-    <param name="baud"  value="57600"/>
   </node>
-  <node pkg="rosserial_python"     type="serial_node.py"         name="serial_uno"      output="screen">
+  <node pkg="rosserial_python"      type="serial_node.py"         name="serial_uno"      output="screen">
     <param name="port"  value="/dev/ttyACM0"/>
-    <param name="baud"  value="115200"/>
   </node>
-  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+  <node pkg="robot_state_publisher" type="robot_state_publisher"  name="robot_state_publisher">
     <param name="publish_frequency" type="double" value="5.0" />
   </node>
   

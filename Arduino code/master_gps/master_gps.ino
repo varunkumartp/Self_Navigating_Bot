@@ -1,13 +1,13 @@
 #include <SoftwareSerial.h>
 #include <TinyGPS.h>
 #include <ros.h>
-#include <std_msgs/Float64.h>
+#include <std_msgs/Float32.h>
 
 //Ros Node
 ros::NodeHandle  nh;
 
-std_msgs::Float64 lat;
-std_msgs::Float64 lon;
+std_msgs::Float32 lat;
+std_msgs::Float32 lon;
 
 //Publisher
 ros::Publisher latPub("lat", &lat);
@@ -38,9 +38,9 @@ void loop()
       delay(1);
       lonPub.publish(&lon);
       delay(1);
+      nh.spinOnce();
+      delay(1);
     }
-    nh.spinOnce();
-    delay(1);
   }
   nh.spinOnce();
   delay(1);

@@ -340,17 +340,8 @@ Simple_MPU6050 & Simple_MPU6050::read_mem(uint16_t mem_addr, uint16_t length, ui
 /**
 @brief      ***EVERYTHING!*** needed to get DMP up and running!
 */
-Simple_MPU6050 & Simple_MPU6050::load_DMP_Image(int16_t ax_, int16_t ay_, int16_t az_, int16_t gx_, int16_t gy_, int16_t gz_,int8_t Calibrate) {
-	sax_ = ax_;
-	say_ = ay_;
-	saz_ = az_;
-	sgx_ = gx_;
-	sgy_ = gy_;
-	sgz_ = gz_;
-	
-	load_DMP_Image();
-	return *this;
-}
+
+
 //#define PWR_MGMT_1_WRITE_DEVICE_RESET(...) MPUi2cWrite(0x6B, 1, 7, 1);delay(100);MPUi2cWrite(0x6A, 4, 3, 0b1111);delay(100);  //   1  Reset the internal registers and restores the default settings. Write a 1 to set the reset, the bit will auto clear.
 Simple_MPU6050 & Simple_MPU6050::load_DMP_Image(uint8_t CalibrateMode) {
 	uint8_t val;
@@ -384,16 +375,6 @@ Simple_MPU6050 & Simple_MPU6050::load_DMP_Image(uint8_t CalibrateMode) {
 	//These are the features the above code initialized for you by default (ToDo Allow removal of one or more Features)
 	dmp_features = DMP_FEATURE_6X_LP_QUAT | DMP_FEATURE_SEND_RAW_ACCEL | DMP_FEATURE_SEND_RAW_GYRO |  DMP_FEATURE_SEND_CAL_GYRO; // These are Fixed into the DMP_Image and Can't be change easily at this time.
 	return *this;
-}
-
-Simple_MPU6050 & Simple_MPU6050::CalibrateMPU(int16_t ax_, int16_t ay_, int16_t az_, int16_t gx_, int16_t gy_, int16_t gz_) {
-	sax_ = ax_;
-	say_ = ay_;
-	saz_ = az_;
-	sgx_ = gx_;
-	sgy_ = gy_;
-	sgz_ = gz_;
-	CalibrateMPU(10);
 }
 
 Simple_MPU6050 & Simple_MPU6050::CalibrateMPU(uint8_t Loops) {
@@ -640,6 +621,7 @@ Simple_MPU6050 & Simple_MPU6050::PID(uint8_t ReadAddress, float kP,float kI, uin
 	SIGNAL_PATH_FULL_RESET_WRITE_RESET();
 	return *this;
 }
+
 Simple_MPU6050 & Simple_MPU6050::resetOffset() {
 	setOffset( sax_,  say_,  saz_,  sgx_,  sgy_,  sgz_);
 	return *this; // return Pointer to this class

@@ -68,10 +68,8 @@ class Simple_MPU6050 : public I2Cdev {
     uint8_t CheckAddress();
     uint8_t TestConnection(int Stop = 1);
     void OverflowProtection(void);
-	Simple_MPU6050 & CalibrateMPU(int16_t ax_, int16_t ay_, int16_t az_, int16_t gx_, int16_t gy_, int16_t gz_);
 	Simple_MPU6050 & CalibrateMPU(uint8_t Loops = 30);
     Simple_MPU6050 & load_DMP_Image(uint8_t CalibrateMode = 0);
-	Simple_MPU6050 & load_DMP_Image(int16_t ax_, int16_t ay_, int16_t az_, int16_t gx_, int16_t gy_, int16_t gz_,int8_t Calibrate = 1);
 	Simple_MPU6050 & resetOffset();
     Simple_MPU6050 & setOffset(int16_t ax_, int16_t ay_, int16_t az_, int16_t gx_, int16_t gy_, int16_t gz_);
     Simple_MPU6050 & on_FIFO(void (*CB)(int16_t *, int16_t *, int32_t *, uint32_t *));

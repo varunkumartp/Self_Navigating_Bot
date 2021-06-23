@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 
+# Converts encoder ticks from wheel to odometry
+
 import rospy
-from math import sin, cos, pi, asin
+from math import sin, cos
 from nav_msgs.msg import Odometry
-from std_msgs.msg import Int16, Float32
+from std_msgs.msg import Int16
 from geometry_msgs.msg import Quaternion
 from tf.broadcaster import TransformBroadcaster
 
@@ -48,7 +50,8 @@ class DiffTf:
         self.th = 0
         self.dx = 0                 # speeds in x/rotation
         self.dr = 0
-        self.quaternion = Quaternion()
+        self.prev_th = 0
+        self.quaternion = Quaternion(0,0,0,1)
         self.then = rospy.Time.now()
         
         # subscriptions
@@ -88,8 +91,8 @@ class DiffTf:
            
             # distance traveled is the average of the two wheels 
             d = ( d_left + d_right ) / 2
-            
             # this approximation works (in radians) for small angles
+
             th = ( d_right - d_left ) / self.base_width
             
             # calculate velocities
@@ -107,8 +110,8 @@ class DiffTf:
                 self.th = self.th + th
             
             # publish the odom information
-            self.quaternion.x = 0.0
-            self.quaternion.y = 0.0
+            self.quaternion.x = 0
+            self.quaternion.y = 0
             self.quaternion.z = sin( self.th / 2 )
             self.quaternion.w = cos( self.th / 2 )
             self.odomBroadcaster.sendTransform(
@@ -118,7 +121,6 @@ class DiffTf:
                 self.base_frame_id,
                 self.odom_frame_id
                 )
-            
             odom = Odometry()
             odom.header.stamp = now
             odom.header.frame_id = self.odom_frame_id
@@ -131,7 +133,7 @@ class DiffTf:
             odom.twist.twist.linear.y = 0
             odom.twist.twist.angular.z = self.dr
             self.odomPub.publish(odom)
-     
+
     #############################################################################
     def lwheelCallback(self, msg):
     #############################################################################
@@ -166,4 +168,3 @@ if __name__ == '__main__':
     diffTf.spin()
     
     
-   
