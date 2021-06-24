@@ -260,6 +260,7 @@ void control_callback(const std_msgs::Int16 &character)
 
 void setup()
 {
+  nh.getHardware()->setBaud(115200);
   nh.initNode();
   nh.advertise(lwheelPub);
   nh.advertise(rwheelPub);
