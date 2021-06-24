@@ -340,7 +340,17 @@ Simple_MPU6050 & Simple_MPU6050::read_mem(uint16_t mem_addr, uint16_t length, ui
 /**
 @brief      ***EVERYTHING!*** needed to get DMP up and running!
 */
-
+Simple_MPU6050 & Simple_MPU6050::load_DMP_Image(int16_t ax_, int16_t ay_, int16_t az_, int16_t gx_, int16_t gy_, int16_t gz_) {
+	sax_ = ax_;
+	say_ = ay_;
+	saz_ = az_;
+	sgx_ = gx_;
+	sgy_ = gy_;
+	sgz_ = gz_;
+	
+	load_DMP_Image();
+	return *this;
+}
 
 //#define PWR_MGMT_1_WRITE_DEVICE_RESET(...) MPUi2cWrite(0x6B, 1, 7, 1);delay(100);MPUi2cWrite(0x6A, 4, 3, 0b1111);delay(100);  //   1  Reset the internal registers and restores the default settings. Write a 1 to set the reset, the bit will auto clear.
 Simple_MPU6050 & Simple_MPU6050::load_DMP_Image(uint8_t CalibrateMode) {
@@ -394,6 +404,20 @@ Simple_MPU6050 & Simple_MPU6050::CalibrateMPU(uint8_t Loops) {
 	XG_OFFSET_H_READ_X_OFFS_USR(&sgx_);
 	YG_OFFSET_H_READ_Y_OFFS_USR(&sgy_);
 	ZG_OFFSET_H_READ_Z_OFFS_USR(&sgz_);
+	// Uncomment the below lines to print the offsets in serial monitor 
+	// Serial.print(sax_);
+	// Serial.print("  ");
+	// Serial.print(say_);
+	// Serial.print("  ");
+	// Serial.print(saz_);
+	// Serial.print("  ");
+	// Serial.print(sgx_);
+	// Serial.print("  ");
+	// Serial.print(sgy_);
+	// Serial.print("  ");
+	// Serial.print(sgz_);
+	// Serial.println("  ");
+	
 	return *this;
 }
 
