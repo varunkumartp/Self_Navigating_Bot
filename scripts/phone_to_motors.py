@@ -22,6 +22,7 @@ class PhoneToMotors:
         rospy.Subscriber('B', Bool, self.b_callback)
         rospy.Subscriber('L', Bool, self.l_callback)
         rospy.Subscriber('R', Bool, self.r_callback)
+        rospy.Subscriber('S', Bool, self.s_callback)
         
     #############################################################
     def spin(self):
@@ -56,6 +57,11 @@ class PhoneToMotors:
     def b_callback(self,msg):
     #############################################################
         self.send(2, msg.data)
+    
+    #############################################################
+    def s_callback(self,msg):
+    #############################################################
+        self.send(0, msg.data)
         
 #############################################################
 #############################################################
