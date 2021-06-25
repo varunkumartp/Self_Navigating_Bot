@@ -3,14 +3,29 @@
 #include "Wire.h"
 #include <rosuno.h>
 #include <geometry_msgs/Quaternion.h>
+#include <std_msgs/Float32.h>
+
+// Ultrasonic sensor pins
+#define trigl 4
+#define echol 5
+#define trigc 6
+#define echoc 7
+#define trigr 8
+#define echor 9
 
 //Ros Node
 ros::NodeHandle  nh;
 
 geometry_msgs::Quaternion quaternion;
+std_msgs::Float32 USSL;
+std_msgs::Float32 USSC;
+std_msgs::Float32 USSR;
 
 //Publisher
 ros::Publisher quatPub("quaternion", &quaternion);
+ros::Publisher leftPub("left", &USSL);
+ros::Publisher centerPub("center", &USSC);
+ros::Publisher rightPub("right", &USSR);
 
 MPU6050 mpu;
 Quaternion q;
@@ -25,10 +40,33 @@ void dmpDataReady()
   mpuInterrupt = true;
 }
 
+float checkDistance(int echo, int trig)
+{
+  digitalWrite(trig, HIGH);
+  delayMicroseconds(2);
+  digitalWrite(trig, LOW);
+  delayMicroseconds(10);
+  digitalWrite(trig, HIGH);
+  long duration = pulseIn(echo, HIGH);
+  float distance = (duration * 0.034 / 2)/100;
+  if (distance > 1.00)
+    return 1.00;
+  return distance;  
+}
+
 void setup()
 {
   nh.initNode();
   nh.advertise(quatPub);
+  nh.advertise(leftPub);
+  nh.advertise(centerPub);
+  nh.advertise(rightPub);
+  pinMode(trigl, OUTPUT);
+  pinMode(trigc, OUTPUT);
+  pinMode(trigr, OUTPUT);
+  pinMode(echol, INPUT);
+  pinMode(echoc, INPUT);
+  pinMode(echor, INPUT);
   Wire.begin();
   TWBR = 24;
   mpu.initialize();
@@ -59,7 +97,6 @@ void loop()
     if ((fifoCount % packetSize != 0) || (fifoCount < packetSize) )
     {
       mpu.resetFIFO();
-      Serial.println("stopped in reset fifo");
     }
     else
     {
@@ -74,6 +111,15 @@ void loop()
       quaternion.z = q.z;
       quaternion.w = q.w;
       quatPub.publish(&quaternion);
+      USSL.data = checkDistance(echol, trigl);
+      delay(30);
+      USSC.data = checkDistance(echoc, trigc);
+      delay(30);
+      USSR.data = checkDistance(echor, trigr);
+      delay(30);
+      leftPub.publish(&USSL);
+      centerPub.publish(&USSC);
+      rightPub.publish(&USSR);
       nh.spinOnce();
       delay(1);
     }
