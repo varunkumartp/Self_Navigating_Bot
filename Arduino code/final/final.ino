@@ -39,6 +39,14 @@ SoftwareSerial gpsSerial(8, 9); // RX TX
 // GPS object
 TinyGPS gps;
 
+// PID constants
+#define kp 1.55
+#define kd 0.05
+#define ki 1.5
+
+// Timer interrupt delay
+#define DELAY1 1
+
 // motor pins
 #define m1 A2
 #define m2 A3
@@ -71,6 +79,22 @@ int lprev = LOW;
 int rprev = LOW;
 int lcur = LOW;
 int rcur = LOW;
+
+// RPM of wheels
+double lpv_speed = 0;
+double rpv_speed = 0;
+
+//PID variables
+double le_speed = 0; //error of speed = set_speed - pv_speed
+double re_speed = 0; //error of speed = set_speed - pv_speed
+double le_speed_pre = 0;  //last error of speed
+double re_speed_pre = 0;  //last error of speed
+double le_speed_sum = 0;  //sum error of speed
+double re_speed_sum = 0;  //sum error of speed
+double lpwm_pulse = 0;
+double rpwm_pulse = 0;
+double lset_speed = 50;
+double rset_speed = 50;
 
 void motor_control(int in1, int in2, bool m, bool dir)  // motor control
 {
@@ -108,19 +132,16 @@ void sendPulse(int pin, int pwm_pulse)  // pwm function
 
 void lwheel_callback(const std_msgs::Float32 &lvel) // left wheel Subscriber callback
 {
-
-  int lset_speed = map(rvel.data >= 0 ? rvel.data : -1 * rvel.data, 0, 70, 0, 110);
+  lset_speed = lvel.data;
   lstat = lvel.data >= 0 ? true : false;
   motor_control(m1, m2, lset_speed != 0 ? true : false, lstat);
-  sendPulse(e2, lset_speed);
 }
 
 void rwheel_callback(const std_msgs::Float32 &rvel) // right wheel Subscriber callback
 {
-  int rset_speed = map(rvel.data >= 0 ? rvel.data : -1 * rvel.data, 0, 70, 0, 110);;
+  rset_speed = rvel.data;
   rstat = rvel.data >= 0 ? true : false;
   motor_control(m3, m4, rset_speed != 0 ? true : false, rstat);
-  sendPulse(e1, rset_speed);
 }
 
 void Lencoder() // Interrupt Service Routine left wheel
@@ -135,6 +156,50 @@ void Rencoder() // Interrupt Service Routine right wheel
   ++rwheel;
   rwheelMsg.data = rstat ? ++rwheel_encoder : --rwheel_encoder;
   rwheelPub.publish(&rwheelMsg);
+}
+
+ISR(TIMER1_COMPA_vect)  // timer interrupt
+{
+  lpv_speed = lwheel * 3 / DELAY1;
+  rpv_speed = rwheel * 3 / DELAY1;
+  lwheel = 0;
+  rwheel = 0;
+  if (stat)
+  {
+    le_speed = lset_speed - lpv_speed;
+    re_speed = rset_speed - rpv_speed;
+
+    lpwm_pulse = le_speed * kp + le_speed_sum * ki + (le_speed - le_speed_pre) * kd;
+    rpwm_pulse = re_speed * kp + re_speed_sum * ki + (re_speed - re_speed_pre) * kd;
+
+    le_speed_pre = le_speed;  //save last (previous) error
+    re_speed_pre = re_speed;  //save last (previous) error
+
+    le_speed_sum += le_speed; //sum of error
+    re_speed_sum += re_speed; //sum of error
+
+    if (le_speed_sum > 400)
+      le_speed_sum = 400;
+    if (le_speed_sum < -400)
+      le_speed_sum = -400;
+    if (re_speed_sum > 400)
+      re_speed_sum = 400;
+    if (re_speed_sum < -400)
+      re_speed_sum = -400;
+  }
+  else
+  {
+    le_speed = 0;
+    re_speed = 0;
+    le_speed_pre = 0;
+    re_speed_pre = 0;
+    le_speed_sum = 0;
+    re_speed_sum = 0;
+    lpwm_pulse = 0;
+    rpwm_pulse = 0;
+  }
+  sendPulse(e2, lpwm_pulse);
+  sendPulse(e1, rpwm_pulse);
 }
 
 void control_callback(const std_msgs::Int16 &character)
@@ -213,6 +278,16 @@ void setup()
   pinMode(e2, OUTPUT);
   pinMode(lencoder, INPUT);
   pinMode(rencoder, INPUT);
+  noInterrupts();           // disable all interrupts                 //--------------------------timer setup
+  // timer 1 - 1Hz
+  TCCR1A = 0; // set entire TCCR1A register to 0
+  TCCR1B = 0; // same for TCCR1B
+  TCNT1  = 0; //initialize counter value to 0
+  OCR1A = ((long)(16e6) * DELAY1 / 1024) - 1;  // = (16*10^6) / (1*1024) - 1 (must be <65536)
+  TCCR1B |= (1 << WGM12); // turn on CTC mode
+  TCCR1B |= (1 << CS12) | (1 << CS10);  // Set CS12 and CS10 bits for 1024 prescaler
+  TIMSK1 |= (1 << OCIE1A);  // enable timer compare interrupt
+  interrupts();           // enable all interrupts                 //--------------------------timer setup
 }
 
 void loop()
