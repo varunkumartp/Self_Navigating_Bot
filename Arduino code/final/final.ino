@@ -299,12 +299,15 @@ void loop()
     if (gps.encode(gpsSerial.read()))
     {
       gps.f_get_position(&lat.data, &lon.data); // get latitude and longitude
+      latPub.publish(&lat);
+      delay(1);
+      lonPub.publish(&lon);
+      delay(1);
+//      Serial.println("inside gps");
     }
+//    Serial.println("inside");
   }
-  latPub.publish(&lat);
-  delay(1);
-  lonPub.publish(&lon);
-  delay(1);
+//  Serial.println("out");
   rcur = digitalRead(rencoder);
   if (rprev == LOW and rcur == HIGH)
   {
