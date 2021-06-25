@@ -4,7 +4,7 @@
 # Uses quaternions from MPU6050 for orientationr
 
 import rospy
-from math import sin, cos
+from math import sin, cos, asin
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Int16
 from geometry_msgs.msg import Quaternion
@@ -52,7 +52,8 @@ class DiffTfq:
         self.th = 0
         self.dx = 0                 # speeds in x/rotation
         self.dr = 0
-        self.quaternion = Quaternion()
+        self.prev_th = 0
+        self.quaternion = Quaternion(0,0,0,1)
         self.then = rospy.Time.now()
         
         # subscriptions
@@ -95,8 +96,10 @@ class DiffTfq:
             d = ( d_left + d_right ) / 2
             
             # this approximation works (in radians) for small angles
-            th = ( d_right - d_left ) / self.base_width
-            
+            if self.prev_th - asin(self.quaternion.z * 2) != 0:
+                th = asin(self.quaternion.z * 2) - self.prev_th
+                self.prev_th = asin(self.quaternion.z)
+                            
             # calculate velocities
             self.dx = d / elapsed
             self.dr = th / elapsed
