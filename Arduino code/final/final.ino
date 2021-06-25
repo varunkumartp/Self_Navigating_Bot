@@ -303,11 +303,8 @@ void loop()
       delay(1);
       lonPub.publish(&lon);
       delay(1);
-//      Serial.println("inside gps");
     }
-//    Serial.println("inside");
   }
-//  Serial.println("out");
   rcur = digitalRead(rencoder);
   if (rprev == LOW and rcur == HIGH)
   {
