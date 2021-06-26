@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+  Used to launch the 3dsensor launch file 
+-->
+<launch>
+  <include file="$(find navigator_bringup)/launch/3dsensor.launch">
+    <arg name="rgb_processing" value="false" />
+    <arg name="depth_registration" value="false" />
+    <arg name="depth_processing" value="false" />
+    <arg name="scan_topic" value="/scan" />
+  </include>
+</launch>
