@@ -4,5 +4,5 @@
 -->
 <launch>
     <include file="$(find freenect_launch)/launch/freenect.launch"/>
-    <node pkg="navigator_bringup" name="Display" type="getImage.py" output="screen"/>
+    <node pkg="navigator_bringup" name="Display" type="get_image.py" output="screen"/>
 </launch>

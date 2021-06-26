@@ -3,5 +3,5 @@
   Launches the Rviz 
 -->
 <launch>
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find navigator_bringup)/rviz/robot_mapping2.rviz" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find navigator_bringup)/rviz/robot_mapping.rviz" />
 </launch>
