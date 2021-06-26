@@ -3,21 +3,23 @@
 ## Prerequisites
 Install the [ROS Noetic](http://wiki.ros.org/noetic/Installation/Ubuntu) framework for Ubuntu 20.04.
 
-## Dependencies
-### Install the following dependencies in terminal:-  
+## Setup
+Create a workspace
 ```
-sudo apt-get install -y libfreenect-dev  
-sudo apt-get install ros-noetic-rtabmap-ros (replace noetic by the ros distro which you are using)  
+mkdir -p ~/project/src
+cd ~/project/src
 ```
-### Clone these packages from github  
+Clone the git repository into the src folder
 ```
-ros_comm  
-std_msgs  
-rosserial  
-navigation  
-rgbd_launch  
-freenect_stack  
-openslam_gmapping  
-robot_state_publisher  
-depthimage_to_laserscan  
+# Git must be installed
+git clone https://github.com/varun-kumar-tp/navigator_bringup.git
+# Installs the dependencies required for successful catkin_make
+navigator_bringup/dependencies.sh
+# Clones the required packages from github into the src folder 
+navigator_bringup/packages.sh
+cd ..
+# Builds the code
+catkin_make
+# If no errors run
+source devel/setup.bash
 ```
