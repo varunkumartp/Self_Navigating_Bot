@@ -5,12 +5,12 @@ Install the [ROS Noetic](http://wiki.ros.org/noetic/Installation/Ubuntu) framewo
 
 ## Setup
 Create a workspace
-```
+``` bash
 mkdir -p ~/project/src
 cd ~/project/src
 ```
 Clone the git repository into the src folder
-```
+```bash
 # Git must be installed
 git clone https://github.com/varun-kumar-tp/navigator_bringup.git
 # Installs the dependencies required for successful catkin_make
