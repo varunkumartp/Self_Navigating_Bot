@@ -59,8 +59,8 @@ class TwistToMotors():
         self.left = self.left * 60 / ( self.dia * math.pi )
         self.right = self.right * 60 / ( self.dia * math.pi )
         #rospy.loginfo("RPM = (%d, %d)", self.left, self.right)       
-        self.pub_lmotor.publish(self.map(self.left, -83, 83, -128, 128))
-        self.pub_rmotor.publish(self.map(self.right, -83, 83, -128, 128))
+        self.pub_lmotor.publish(self.map(self.left, -83, 83, -150, 150))
+        self.pub_rmotor.publish(self.map(self.right, -83, 83, -150, 150))
         self.ticks_since_target += 1
 
     #############################################################

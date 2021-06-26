@@ -76,6 +76,7 @@ class DiffTfq:
     #############################################################################
     def update(self):
     #############################################################################
+        th = 0
         now = rospy.Time.now()
         if now > self.t_next:
             elapsed = now - self.then
@@ -96,9 +97,9 @@ class DiffTfq:
             d = ( d_left + d_right ) / 2
             
             # this approximation works (in radians) for small angles
-            if self.prev_th - asin(self.quaternion.z * 2) != 0:
-                th = asin(self.quaternion.z * 2) - self.prev_th
-                self.prev_th = asin(self.quaternion.z)
+            if self.prev_th - asin(self.quaternion.z) * 2 != 0:
+                th = asin(self.quaternion.z) * 2 - self.prev_th
+                self.prev_th = asin(self.quaternion.z) * 2
                             
             # calculate velocities
             self.dx = d / elapsed

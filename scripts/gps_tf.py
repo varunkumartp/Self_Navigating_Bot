@@ -25,9 +25,9 @@ class gps_tf:
         self.t_delta = rospy.Duration(1.0/self.rate)
         self.t_next = rospy.Time.now() + self.t_delta
         
-        self.latitude = Float32()
-        self.longitude = Float32()
-        self.quaternion = Quaternion()
+        self.latitude = 0
+        self.longitude = 0
+        self.quaternion = Quaternion(0,0,0,1)
                 
         # subscriptions
         rospy.Subscriber("lat", Float32, self.latCallback)
@@ -56,7 +56,7 @@ class gps_tf:
             elapsed = now - self.then
             self.then = now
             elapsed = elapsed.to_sec()
-
+            rospy.loginfo("Latitude = %f ; Longitude = %f",self.latitude, self.longitude)
             Pose = PoseStamped()
             Pose.header.stamp = now
             Pose.header.frame_id = 'map'

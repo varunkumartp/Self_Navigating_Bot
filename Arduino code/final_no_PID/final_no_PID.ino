@@ -75,12 +75,14 @@ void motor_control(int in1, int in2, int pin, int m, bool dir)  // motor control
 
 void lwheel_callback(const std_msgs::Float32 &lvel) // left wheel Subscriber callback
 {
+  Serial.println(lvel.data);
   lstat = lvel.data >= 0;
   motor_control(m1, m2, e1, lvel.data, lstat);
 }
 
 void rwheel_callback(const std_msgs::Float32 &rvel) // right wheel Subscriber callback
 {
+  Serial.println(rvel.data);
   rstat = rvel.data >= 0;
   motor_control(m3, m4, e2, rvel.data, rstat);
 }
