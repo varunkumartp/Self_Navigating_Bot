@@ -14,9 +14,9 @@ Clone the git repository into the src folder
 # Git must be installed
 git clone https://github.com/varun-kumar-tp/navigator_bringup.git
 # Installs the dependencies required for successful catkin_make
-navigator_bringup/dependencies.sh
+navigator_bringup/shell_scripts/dependencies.sh
 # Clones the required packages from github into the src folder 
-navigator_bringup/packages.sh
+navigator_bringup/shell_scripts/packages.sh
 cd ..
 # Builds the code
 catkin_make
