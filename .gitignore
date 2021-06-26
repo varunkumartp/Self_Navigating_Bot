@@ -2,4 +2,4 @@ arduino/
 .vscode/
 offsets.txt
 pywhatkit_dbs.txt
-scripts/pswd_gen.py
+scripts/pswrd_gen.py
