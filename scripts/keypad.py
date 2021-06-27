@@ -1,8 +1,3 @@
-# This program allows a user to enter a
-# Code. If the C-Button is pressed on the
-# keypad, the input is reset. If the user
-# hits the A-Button, the input is checked.
-
 import RPi.GPIO as GPIO
 import time
 
@@ -65,25 +60,20 @@ def checkSpecialKeys():
     global input
     pressed = False
 
-    GPIO.output(L3, GPIO.HIGH)
-
-    if (GPIO.input(C3) == 1):
+    GPIO.output(L4, GPIO.HIGH)
+    if (GPIO.input(C1) == 1):
         print("Input reset!");
         pressed = True
-
-    GPIO.output(L3, GPIO.LOW)
-    GPIO.output(L1, GPIO.HIGH)
-
+    GPIO.output(L4, GPIO.LOW)
+    
+    GPIO.output(L4, GPIO.HIGH)
     if (not pressed and GPIO.input(C3) == 1):
         if input == secretCode:
             print("Code correct!")
-            # TODO: Unlock a door, turn a light on, etc.
         else:
             print("Incorrect code!")
-            # TODO: Sound an alarm, send an email, etc.
         pressed = True
-
-    GPIO.output(L3, GPIO.LOW)
+    GPIO.output(L4, GPIO.LOW)
 
     if pressed:
         input = ""
@@ -94,8 +84,6 @@ def checkSpecialKeys():
 # to the button, to a variable
 def readLine(line, characters):
     global input
-    # We have to send a pulse on each line to
-    # detect button presses
     GPIO.output(line, GPIO.HIGH)
     if(GPIO.input(C1) == 1):
         input = input + characters[0]
