@@ -1,119 +1,149 @@
+#!/usr/bin/env python
+
 import RPi.GPIO as GPIO
 import time
+import rospy
+from std_msgs.msg import String, Bool 
 
-# These are the GPIO pin numbers where the
-# lines of the keypad matrix are connected
-L1 = 5
-L2 = 6
-L3 = 13
-L4 = 19
+#############################################################################
+class keypad:
+#############################################################################
+        
+    #############################################################################
+    def __init__(self):
+    #############################################################################
+        rospy.init_node('keypad')
+        nodename = rospy.get_name()
+        rospy.loginfo("%s started" % nodename)
+        self.rate = rospy.get_param("~rate", 10)
+        
+        # GPIO
+        # row pins
+        self.L1 = 5
+        self.L2 = 6
+        self.L3 = 13
+        self.L4 = 19
 
-# These are the four columns
-C1 = 12
-C2 = 16
-C3 = 20
+        # column pins
+        self.C1 = 12
+        self.C2 = 16
+        self.C3 = 20
+        
+        self.keypadPressed = -1
+        self.input = ''
+        self.otp = '1234'
+        
+        # Setup GPIO
+        GPIO.setwarnings(False)
+        GPIO.setmode(GPIO.BCM)
+        # GPIO output
+        GPIO.setup(self.L1, GPIO.OUT)
+        GPIO.setup(self.L2, GPIO.OUT)
+        GPIO.setup(self.L3, GPIO.OUT)
+        GPIO.setup(self.L4, GPIO.OUT)
+        # Use the internal pull-down resistors
+        GPIO.setup(self.C1, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        GPIO.setup(self.C2, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        GPIO.setup(self.C3, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        # Detect the rising edges on the column lines of the
+        # keypad. This way, we can detect if the user presses
+        # a button when we send a pulse.
+        GPIO.add_event_detect(self.C1, GPIO.RISING, callback=self.keypadCallback)
+        GPIO.add_event_detect(self.C2, GPIO.RISING, callback=self.keypadCallback)
+        GPIO.add_event_detect(self.C3, GPIO.RISING, callback=self.keypadCallback)
 
-# The GPIO pin of the column of the key that is currently
-# being held down or -1 if no key is pressed
-keypadPressed = -1
+        # publisher
+        self.statPub = rospy.Publisher('status', Bool, queue_size = 10)
+        
+        # subscriber
+        rospy.Subscriber('otp',String, self.otpCallback)
+        
+    #############################################################################
+    def otpCallback(self,msg):
+    #############################################################################
+        self.otp = msg.data
+        
+    #############################################################################
+    def keypadCallback(self,channel):
+    #############################################################################
+        if self.keypadPressed == -1:
+            self.keypadPressed = channel
 
-secretCode = "4789"
-input = ""
+    #############################################################################
+    def setAllLines(self,state):
+    #############################################################################
+        GPIO.output(self.L1, state)
+        GPIO.output(self.L2, state)
+        GPIO.output(self.L3, state)
+        GPIO.output(self.L4, state)
 
-# Setup GPIO
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)
+    #############################################################################
+    def checkSpecialKeys(self):
+    #############################################################################
+        pressed = False
 
-GPIO.setup(L1, GPIO.OUT)
-GPIO.setup(L2, GPIO.OUT)
-GPIO.setup(L3, GPIO.OUT)
-GPIO.setup(L4, GPIO.OUT)
+        # check if * is pressed
+        GPIO.output(self.L4, GPIO.HIGH)
+        if (GPIO.input(self.C1) == 1):
+            pressed = True
+        GPIO.output(self.L4, GPIO.LOW)
+        
+        # check if # is pressed 
+        GPIO.output(self.L4, GPIO.HIGH)
+        if (not pressed and GPIO.input(self.C3) == 1):
+            self.statPub(self.input == self.otp)
+            pressed = True
+        GPIO.output(self.L4, GPIO.LOW)
 
-# Use the internal pull-down resistors
-GPIO.setup(C1, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(C2, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(C3, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        if pressed:
+            self.input = ""
 
-# This callback registers the key that was pressed
-# if no other key is currently pressed
-def keypadCallback(channel):
-    global keypadPressed
-    if keypadPressed == -1:
-        keypadPressed = channel
+        return pressed
 
-# Detect the rising edges on the column lines of the
-# keypad. This way, we can detect if the user presses
-# a button when we send a pulse.
-GPIO.add_event_detect(C1, GPIO.RISING, callback=keypadCallback)
-GPIO.add_event_detect(C2, GPIO.RISING, callback=keypadCallback)
-GPIO.add_event_detect(C3, GPIO.RISING, callback=keypadCallback)
-
-# Sets all lines to a specific state. This is a helper
-# for detecting when the user releases a button
-def setAllLines(state):
-    GPIO.output(L1, state)
-    GPIO.output(L2, state)
-    GPIO.output(L3, state)
-    GPIO.output(L4, state)
-
-def checkSpecialKeys():
-    global input
-    pressed = False
-
-    GPIO.output(L4, GPIO.HIGH)
-    if (GPIO.input(C1) == 1):
-        print("Input reset!");
-        pressed = True
-    GPIO.output(L4, GPIO.LOW)
+    #############################################################################
+    def readLine(self, line, characters):
+    #############################################################################
+        GPIO.output(line, GPIO.HIGH)
+        if(GPIO.input(self.C1) == 1):
+            self.input = self.input + characters[0]
+        if(GPIO.input(self.C2) == 1):
+            self.input = self.input + characters[1]
+        if(GPIO.input(self.C3) == 1):
+            self.input = self.input + characters[2]
+        GPIO.output(line, GPIO.LOW)
     
-    GPIO.output(L4, GPIO.HIGH)
-    if (not pressed and GPIO.input(C3) == 1):
-        if input == secretCode:
-            print("Code correct!")
-        else:
-            print("Incorrect code!")
-        pressed = True
-    GPIO.output(L4, GPIO.LOW)
-
-    if pressed:
-        input = ""
-
-    return pressed
-
-# reads the columns and appends the value, that corresponds
-# to the button, to a variable
-def readLine(line, characters):
-    global input
-    GPIO.output(line, GPIO.HIGH)
-    if(GPIO.input(C1) == 1):
-        input = input + characters[0]
-    if(GPIO.input(C2) == 1):
-        input = input + characters[1]
-    if(GPIO.input(C3) == 1):
-        input = input + characters[2]
-    GPIO.output(line, GPIO.LOW)
-
-try:
-    while True:
+    #############################################################################
+    def spin(self):
+    #############################################################################
+        r = rospy.Rate(self.rate)
+        while not rospy.is_shutdown():
+            self.check()
+            r.sleep()
+            
+    #############################################################################
+    def check(self):
+    #############################################################################
         # If a button was previously pressed,
         # check, whether the user has released it yet
-        if keypadPressed != -1:
-            setAllLines(GPIO.HIGH)
-            if GPIO.input(keypadPressed) == 0:
-                keypadPressed = -1
+        if self.keypadPressed != -1:
+            self.setAllLines(GPIO.HIGH)
+            if GPIO.input(self.keypadPressed) == 0:
+                self.keypadPressed = -1
             else:
                 time.sleep(0.1)
         # Otherwise, just read the input
         else:
-            if not checkSpecialKeys():
-                readLine(L1, ["1","2","3"])
-                readLine(L2, ["4","5","6"])
-                readLine(L3, ["7","8","9"])
-                readLine(L4, ["*","0","#"])
-                time.sleep(0.1)
-            else:
-                time.sleep(0.1)
-except KeyboardInterrupt:
-    print("\nApplication stopped!")
+            if not self.checkSpecialKeys():
+                self.readLine(self.L1, ["1","2","3"])
+                self.readLine(self.L2, ["4","5","6"])
+                self.readLine(self.L3, ["7","8","9"])
+                self.readLine(self.L4, ["*","0","#"])
+            time.sleep(0.1)
+            
+#############################################################################
+#############################################################################                
+if __name__ == '__main__':
+    k = keypad()
+    k.spin()
 
     
