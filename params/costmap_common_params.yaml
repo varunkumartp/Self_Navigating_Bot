@@ -47,5 +47,11 @@ inflation_layer:
 
 static_layer:
   enabled:              true
+
+range_sensor_layer:
+  clear_threshold:    0.46
+  mark_threshold:     0.98
+  clear_on_max_reading: true
+  topics: ["/range_data"]
   
 
