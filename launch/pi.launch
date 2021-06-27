@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <launch>
     <include file="$(find navigator_bringup)/launch/robot_standalone.launch"/>
-    <node pkg = "navigator_bringup" type = "keypad.py"  name = "keypad"  output = "screen"/>
-    
+    <node pkg = "navigator_bringup" type = "keypad.py"  name = "keypad"/>
 </launch>

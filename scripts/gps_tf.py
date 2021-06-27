@@ -17,14 +17,6 @@ class gps_tf:
         self.nodename = rospy.get_name()
         rospy.loginfo("-I- %s started" % self.nodename)  #10260
         
-        #### parameters #######
-        self.rate = rospy.get_param('~rate',10.0)  # the rate at which to publish the transform
-        self.odom_frame_id = rospy.get_param('~odom_frame_id', 'odom') # the name of the odometry reference frame
-
-        self.then = rospy.Time.now()
-        self.t_delta = rospy.Duration(1.0/self.rate)
-        self.t_next = rospy.Time.now() + self.t_delta
-        
         self.latitude = 0
         self.longitude = 0
         self.quaternion = Quaternion(0,0,0,1)
@@ -42,41 +34,34 @@ class gps_tf:
     #############################################################################
     def spin(self):
     #############################################################################
-        r = rospy.Rate(self.rate)
+        r = rospy.Rate(10)
         while not rospy.is_shutdown():
             self.update()
             r.sleep()
-       
      
     #############################################################################
     def update(self):
     #############################################################################
-        now = rospy.Time.now()
-        if now > self.t_next:
-            elapsed = now - self.then
-            self.then = now
-            elapsed = elapsed.to_sec()
-            rospy.loginfo("Latitude = %f ; Longitude = %f",self.latitude, self.longitude)
-            Pose = PoseStamped()
-            Pose.header.stamp = now
-            Pose.header.frame_id = 'map'
-            Pose.pose.position.x = self.latitude
-            Pose.pose.position.y = self.longitude
-            Pose.pose.position.z = 0
-            Pose.pose.orientation = self.quaternion
-            self.gps_goal_pose.publish(Pose)
-            self.local_xy_origin.publish(Pose)
+        Pose = PoseStamped()
+        Pose.header.stamp = rospy.Time.now()
+        Pose.header.frame_id = 'map'
+        Pose.pose.position.x = self.latitude
+        Pose.pose.position.y = self.longitude
+        Pose.pose.position.z = 0
+        Pose.pose.orientation = self.quaternion
+        self.gps_goal_pose.publish(Pose)
+        self.local_xy_origin.publish(Pose)
 
-            navsatfix = NavSatFix()
-            navsatfix.header.stamp = now
-            navsatfix.header.frame_id = 'map'
-            navsatfix.status.status = 1
-            navsatfix.status.service = 1
-            navsatfix.latitude = self.latitude
-            navsatfix.longitude = self.longitude
-            navsatfix.altitude = 0
-            self.gps_goal_fix.publish(navsatfix)
-            
+        navsatfix = NavSatFix()
+        navsatfix.header.stamp = rospy.Time.now()
+        navsatfix.header.frame_id = 'map'
+        navsatfix.status.status = 1
+        navsatfix.status.service = 1
+        navsatfix.latitude = self.latitude
+        navsatfix.longitude = self.longitude
+        navsatfix.altitude = 0
+        self.gps_goal_fix.publish(navsatfix)
+        
 
     #############################################################################
     def quatCallback(self, msg):
@@ -96,8 +81,6 @@ class gps_tf:
     def lonCallback(self, msg):
     #############################################################################
         self.longitude = msg.data
-
-    
 
 #############################################################################
 #############################################################################
