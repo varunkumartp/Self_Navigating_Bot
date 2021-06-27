@@ -91,7 +91,7 @@ class keypad:
         # check if # is pressed 
         GPIO.output(self.L4, GPIO.HIGH)
         if (not pressed and GPIO.input(self.C3) == 1):
-            self.statPub(self.input == self.otp)
+            self.statPub.publish(self.input == self.otp)
             pressed = True
         GPIO.output(self.L4, GPIO.LOW)
 
