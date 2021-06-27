@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
+import serial
 import rospy
 from std_msgs.msg import Float32
 from sensor_msgs.msg import NavSatFix
 from geometry_msgs.msg import Quaternion, PoseStamped
 import numpy as np
-
+ 
 #############################################################################
 class gps_tf:
 #############################################################################
@@ -20,10 +21,11 @@ class gps_tf:
         self.latitude = 0
         self.longitude = 0
         self.quaternion = Quaternion(0,0,0,1)
+        
+        # serial port
+        self.serialPort = serial.Serial(port = "/dev/ttyAMA1", baudrate=9600, bytesize=8, timeout=2)
                 
         # subscriptions
-        rospy.Subscriber("lat", Float32, self.latCallback)
-        rospy.Subscriber("lon", Float32, self.lonCallback)
         rospy.Subscriber("quaternion", Quaternion, self.quatCallback)
         
         #Publishers
@@ -36,6 +38,7 @@ class gps_tf:
     #############################################################################
         r = rospy.Rate(10)
         while not rospy.is_shutdown():
+            self.get_gps()
             self.update()
             r.sleep()
      
@@ -61,7 +64,18 @@ class gps_tf:
         navsatfix.longitude = self.longitude
         navsatfix.altitude = 0
         self.gps_goal_fix.publish(navsatfix)
-        
+    
+    #############################################################################
+    def get_gps(self):
+    #############################################################################
+        if(self.serialPort.in_waiting > 0):
+            a = self.serialPort.readline().decode('ascii', errors='replace')
+            for line in a.split('\n') :
+                if line.startswith( '$GPGGA' ) :
+                    lat, _, lon = line.strip().split(',')[2:5]
+                    self.latitude = round(float(lat)/100,6)
+                    self.longitude = round(float(lon)/100,6)
+        #rospy.loginfo("latitude = %f - longitude = %f",self.latitude, self.longitude)     
 
     #############################################################################
     def quatCallback(self, msg):
@@ -72,22 +86,9 @@ class gps_tf:
         self.quaternion.z = -qArray[2]
         self.quaternion.w = qArray[3]
     
-    #############################################################################
-    def latCallback(self, msg):
-    #############################################################################
-        self.latitude = msg.data
-
-    #############################################################################
-    def lonCallback(self, msg):
-    #############################################################################
-        self.longitude = msg.data
-
 #############################################################################
 #############################################################################
 if __name__ == '__main__':
     """ main """
     gpsTf = gps_tf()
     gpsTf.spin()
-    
-    
-   
