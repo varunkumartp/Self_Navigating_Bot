@@ -12,12 +12,13 @@
   <rosparam param="ticks_meter">96</rosparam>
   
   <!-- Use this when only encoder ticks are used for orientation -->
-  <node pkg="navigator_bringup"     type="diff_tf.py"             name="diff_tf"         output="screen"/> 
+  <!-- <node pkg="navigator_bringup"     type="diff_tf.py"             name="diff_tf"         output="screen"/>  -->
   <!-- Use this when an IMU is used for orientation-->
-  <!-- <node pkg="navigator_bringup"     type="diff_tfq.py"            name="diff_tfq"         output="screen"/> -->
+  <node pkg="navigator_bringup"     type="diff_tfq.py"            name="diff_tfq"         output="screen"/>
   <node pkg="navigator_bringup"     type="gps_tf.py"              name="gps_tf"          output="screen"/>
   <node pkg="navigator_bringup"     type="twist_to_motors.py"     name="twist_to_motors" output="screen"/>
   <node pkg="navigator_bringup"     type="phone_to_motors.py"     name="phone_to_motors" output="screen"/>
+  <node pkg="navigator_bringup"     type="ultrasound.py"          name="ultrasound"      output="screen"/>
   <node pkg="rosserial_python"      type="serial_node.py"         name="serial_nano"     output="screen">
     <param name="baud"  value="115200"/>
     <param name="port"  value="/dev/ttyUSB0"/>
