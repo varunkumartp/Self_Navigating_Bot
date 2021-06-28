@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+  Used to launch all the nodes that support hardware and to use the urdf file
+-->
+<launch>
+  <arg name="simulation" default="$(optenv TURTLEBOT_SIMULATION false)"/>
+  
+  <param name="/use_sim_time" value="$(arg simulation)"/>
+  <param name="robot_description" textfile="$(find navigator_bringup)/urdf/robotr_description.urdf" />
+  
+  <rosparam param="base_width">0.24</rosparam>
+  <rosparam param="ticks_meter">96</rosparam>
+  
+  <node pkg="navigator_bringup"     type="diff_tfq.py"            name="diff_tfq"         output="screen"/>
+  <node pkg="navigator_bringup"     type="twist_to_motors.py"     name="twist_to_motors" output="screen"/>
+  <node pkg="navigator_bringup"     type="phone_to_motors.py"     name="phone_to_motors" output="screen"/>
+  <node pkg="robot_state_publisher" type="robot_state_publisher"  name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="5.0" />
+  </node>
+  
+</launch>
