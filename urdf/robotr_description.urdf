@@ -1064,7 +1064,7 @@
   <link name="camera_rgb_optical_frame"/>
   <joint name="kinect_camera_joint" type="fixed">
       <origin xyz="0 0.023 0" rpy="0 0 0" />
-      <parent link="base_link"/>
+      <parent link="kinect"/>
       <child link="camera_link" />
   </joint>
   <joint name="camera_joint_1" type="fixed">
