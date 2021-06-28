@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Converts encoder ticks from wheel to odometry
+# Converts encoder ticks from wheel to odometry 
 
 import rospy
 from math import sin, cos
