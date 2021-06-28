@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<!--
-    This launch file used to use the kinect as a camera
--->
-<launch>
-    <include file="$(find freenect_launch)/launch/freenect.launch"/>
-    <node pkg="navigator_bringup" name="Display" type="get_image.py" output="screen"/>
-</launch>
