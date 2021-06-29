@@ -3,5 +3,11 @@
   Launches the Rviz 
 -->
 <launch>
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find navigator_bringup)/rviz/robot_mapping.rviz" />
+  <node pkg="rviz" name="rviz" type="rviz" args="-d $(find navigator_bringup)/rviz/robot_mapping.rviz" output="screen"/>
+  <node pkg="nodelet" type="nodelet" name="points_xyzrgb" args="standalone rtabmap_ros/point_cloud_xyzrgb">
+    <remap from="rgb/image"       to="/camera/rgb/image_raw"/>
+    <remap from="depth/image"     to="/camera/depth/image_raw"/>
+    <remap from="rgb/camera_info" to="/camera/rgb/camera_info"/>    
+    <param name="queue_size" type="int" value="10"/>
+  </node>
 </launch>
