@@ -73,8 +73,11 @@ class gps_tf:
             for line in a.split('\n') :
                 if line.startswith( '$GPGGA' ) :
                     lat, _, lon = line.strip().split(',')[2:5]
-                    self.latitude = round(float(lat)/100,6)
-                    self.longitude = round(float(lon)/100,6)
+                else:
+                    lat = '0.0'
+                    lon = '0.0'
+                self.latitude = round(float(lat)/100,6)
+                self.longitude = round(float(lon)/100,6)
         #rospy.loginfo("latitude = %f - longitude = %f",self.latitude, self.longitude)     
 
     #############################################################################
