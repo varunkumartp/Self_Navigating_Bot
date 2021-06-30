@@ -25,11 +25,11 @@ class DiffTfq:
         #### parameters #######
         self.rate = rospy.get_param('~rate',10.0)  # the rate at which to publish the transform
         self.ticks_meter = float(rospy.get_param('ticks_meter', 96))  # The number of wheel encoder ticks per meter of travel
-        self.base_width = float(rospy.get_param('~base_width', 0.237)) # The wheel base width in meters
-        
+        self.base_width = float(rospy.get_param('~base_width', 0.24)) # The wheel base width in meters
+        self.control = rospy.get_param('~control_bit',1)
         self.base_frame_id = rospy.get_param('~base_frame_id','base_footprint') # the name of the base frame of the robot
         self.odom_frame_id = rospy.get_param('~odom_frame_id', 'odom') # the name of the odometry reference frame
-        #2147483648
+        
         self.encoder_min = rospy.get_param('encoder_min', -32678)
         self.encoder_max = rospy.get_param('encoder_max', 32677)
         self.encoder_low_wrap = rospy.get_param('wheel_low_wrap', (self.encoder_max - self.encoder_min) * 0.3 + self.encoder_min )
@@ -63,12 +63,16 @@ class DiffTfq:
         
         # Publishers
         self.odomPub = rospy.Publisher("odom", Odometry,queue_size=10)
+        self.controlPub = rospy.Publisher("control", Int16, queue_size =10)
         self.odomBroadcaster = TransformBroadcaster()
         
     #############################################################################
     def spin(self):
     #############################################################################
         r = rospy.Rate(self.rate)
+        for i in range(30):
+            self.controlPub.publish(self.control)
+            rospy.Rate(20).sleep()
         while not rospy.is_shutdown():
             self.update()
             r.sleep()
