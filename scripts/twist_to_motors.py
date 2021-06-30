@@ -15,9 +15,9 @@ class TwistToMotors():
     def __init__(self):
     #############################################################
         rospy.init_node("twist_to_motors")
-        nodename = rospy.get_name()
-        rospy.loginfo("%s started" % nodename)
-    
+        self.nodename = rospy.get_name()
+        rospy.loginfo("-I- %s started" % self.nodename)  #10260
+        
         self.w = rospy.get_param("~base_width", 0.24)
     
         self.pub_lmotor = rospy.Publisher('lwheel_vtarget', Float32,queue_size=10)
