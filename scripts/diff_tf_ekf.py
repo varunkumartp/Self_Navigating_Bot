@@ -4,10 +4,12 @@
 
 import rospy
 from math import sin, cos
-from nav_msgs.msg import Odometry
+from nav_msgs.msg import Odometry, Vector3
 from std_msgs.msg import Int16
 from geometry_msgs.msg import Quaternion
+from sensor_msgs.msg import Imu
 from tf.broadcaster import TransformBroadcaster
+import numpy as np
 
 #############################################################################
 class DiffTf:
@@ -52,13 +54,16 @@ class DiffTf:
         self.dr = 0
         self.prev_th = 0
         self.then = rospy.Time.now()
-        
+        self.imu = Imu()
         # subscriptions
         rospy.Subscriber("lwheel", Int16, self.lwheelCallback)
         rospy.Subscriber("rwheel", Int16, self.rwheelCallback)
+        rospy.Subscriber("quat", Quaternion, self.quatCallback)
+        rospy.Subscriber("accel", Vector3, self.accelCallback)
         
         # Publishers
-        self.odomPub = rospy.Publisher("odom", Odometry,queue_size=10)
+        self.imuPub = rospy.Publisher("imu_data", Imu, queue_size = 10)
+        self.odomPub = rospy.Publisher("unfiltered_odom", Odometry,queue_size=10)
         self.odomBroadcaster = TransformBroadcaster()
         
     #############################################################################
@@ -133,7 +138,26 @@ class DiffTf:
             odom.twist.twist.linear.y = 0
             odom.twist.twist.angular.z = self.dr
             self.odomPub.publish(odom)
+            self.imu.header.stamp = rospy.Time.now()
+            self.imu.header.frame_id = "imu_link"
+            self.imuPub.publish(self.imu)
 
+    #############################################################################
+    def quatCallback(self, msg):
+    #############################################################################
+        qArray = [msg.x, msg.y, msg.z, msg.w]/np.linalg.norm([msg.x, msg.y, msg.z, msg.w])
+        self.imu.orientation.x = qArray[0]
+        self.imu.orientation.y = -qArray[1]
+        self.imu.orientation.z = -qArray[2]
+        self.imu.orientation.w = qArray[3]
+    
+    #############################################################################
+    def accelCallback(self, msg):
+    #############################################################################
+        self.imu.linear_acceleration.x = msg.x
+        self.imu.linear_acceleration.y = msg.y
+        self.imu.linear_acceleration.z = msg.z
+    
     #############################################################################
     def lwheelCallback(self, msg):
     #############################################################################

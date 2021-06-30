@@ -52,6 +52,6 @@ range_sensor_layer:
   clear_threshold:    0.46
   mark_threshold:     0.98
   clear_on_max_reading: true
-  topics: ["/range_data"]
+  topics: ["/range_left", "/range_right", "/range_center"]
   
 

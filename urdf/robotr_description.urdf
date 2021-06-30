@@ -5,6 +5,7 @@
 <robot
   name="robotr_description">
   <link name="base_footprint"/>
+  <link name="imu_link"/>
   <joint name="base_joint" type="fixed">
       <origin xyz="0 0 0.07" rpy="0 0 0" />
       <parent link="base_footprint"/>
@@ -842,6 +843,19 @@
       link="4cm_studs" />
     <child
       link="upper_plate" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <joint
+    name="imu_joint"
+    type="fixed">
+    <origin
+      xyz="0 0.04 0"
+      rpy="0 0 0" />
+    <parent
+      link="upper_plate" />
+    <child
+      link="imu_link" />
     <axis
       xyz="0 0 0" />
   </joint>
