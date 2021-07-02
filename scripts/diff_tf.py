@@ -50,7 +50,6 @@ class DiffTf:
         self.th = 0
         self.dx = 0                 # speeds in x/rotation
         self.dr = 0
-        self.prev_th = 0
         self.then = rospy.Time.now()
         
         # subscriptions
