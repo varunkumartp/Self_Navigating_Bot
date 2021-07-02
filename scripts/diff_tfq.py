@@ -57,22 +57,18 @@ class DiffTfq:
         self.then = rospy.Time.now()
         
         # subscriptions
-        rospy.Subscriber("lwheel", Int16, self.lwheelCallback)
-        rospy.Subscriber("rwheel", Int16, self.rwheelCallback)
-        rospy.Subscriber("quat", Quaternion, self.quatCallback)
+        rospy.Subscriber("encoder_ticks/lwheel", Int16, self.lwheelCallback)
+        rospy.Subscriber("encoder_ticks/rwheel", Int16, self.rwheelCallback)
+        rospy.Subscriber("mpu/quat", Quaternion, self.quatCallback)
         
         # Publishers
         self.odomPub = rospy.Publisher("odom", Odometry,queue_size=10)
-        self.controlPub = rospy.Publisher("control", Int16, queue_size =10)
         self.odomBroadcaster = TransformBroadcaster()
         
     #############################################################################
     def spin(self):
     #############################################################################
         r = rospy.Rate(self.rate)
-        for i in range(30):
-            self.controlPub.publish(self.control)
-            rospy.Rate(20).sleep()
         while not rospy.is_shutdown():
             self.update()
             r.sleep()

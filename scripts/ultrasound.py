@@ -17,14 +17,14 @@ class ultrasound:
         rospy.loginfo("-I- %s started" % self.nodename)
         
         # subscribers
-        rospy.Subscriber("left", Float32, self.leftCallback)
-        rospy.Subscriber("center", Float32, self.centerCallback)
-        rospy.Subscriber("right", Float32, self.rightCallback)
+        rospy.Subscriber("ultrasound/left", Float32, self.leftCallback)
+        rospy.Subscriber("ultrasound/center", Float32, self.centerCallback)
+        rospy.Subscriber("ultrasound/right", Float32, self.rightCallback)
         
         # publishers
-        self.left = rospy.Publisher("range_left", Range, queue_size = 10)
-        self.right = rospy.Publisher("range_right", Range, queue_size = 10)
-        self.center = rospy.Publisher("range_center", Range, queue_size = 10)
+        self.left = rospy.Publisher("range/left", Range, queue_size = 10)
+        self.right = rospy.Publisher("range/right", Range, queue_size = 10)
+        self.center = rospy.Publisher("range/center", Range, queue_size = 10)
         
     #############################################################################
     def spin(self):

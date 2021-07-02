@@ -26,7 +26,7 @@ class gps_tf:
         self.serialPort = serial.Serial(port = "/dev/ttyAMA1", baudrate=9600, bytesize=8, timeout=2)
                 
         # subscriptions
-        rospy.Subscriber("quaternion", Quaternion, self.quatCallback)
+        rospy.Subscriber("mpu/quat", Quaternion, self.quatCallback)
         
         #Publishers
         self.gps_goal_fix = rospy.Publisher("gps_goal_fix", NavSatFix, queue_size = 10)

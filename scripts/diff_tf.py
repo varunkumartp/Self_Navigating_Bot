@@ -54,8 +54,8 @@ class DiffTf:
         self.then = rospy.Time.now()
         
         # subscriptions
-        rospy.Subscriber("lwheel", Int16, self.lwheelCallback)
-        rospy.Subscriber("rwheel", Int16, self.rwheelCallback)
+        rospy.Subscriber("encoder_ticks/lwheel", Int16, self.lwheelCallback)
+        rospy.Subscriber("encoder_ticks/rwheel", Int16, self.rwheelCallback)
         
         # Publishers
         self.odomPub = rospy.Publisher("odom", Odometry,queue_size=10)
