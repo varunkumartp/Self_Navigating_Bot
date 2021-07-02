@@ -60,4 +60,10 @@
 	  <param name="Mem/InitWMWithAllNodes" type="string" value="$(arg localization)"/>
    </node>
   </group>
+  <node pkg="nodelet" type="nodelet" name="points_xyzrgb" args="standalone rtabmap_ros/point_cloud_xyzrgb">
+    <remap from="rgb/image"       to="/camera/rgb/image_raw"/>
+    <remap from="depth/image"     to="/camera/depth/image_raw"/>
+    <remap from="rgb/camera_info" to="/camera/rgb/camera_info"/>    
+    <param name="queue_size" type="int" value="10"/>
+  </node>
 </launch>
