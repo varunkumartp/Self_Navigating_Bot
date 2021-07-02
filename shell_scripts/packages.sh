@@ -9,3 +9,4 @@ git clone https://github.com/ros-drivers/freenect_stack.git
 git clone https://github.com/ros/robot_state_publisher.git
 git clone https://github.com/ros-perception/depthimage_to_laserscan.git
 git clone https://github.com/DLu/navigation_layers.git
+git clone https://github.com/ros/geometry2.git
