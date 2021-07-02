@@ -3,7 +3,8 @@
 import rospy
 import numpy as np
 from geometry_msgs.msg import Quaternion, Vector3
-from sensor_msgs.msg import Imu, MagneticField
+from sensor_msgs.msg import Imu
+from std_msgs.msg import Float32
 
 #############################################################################
 class imu_tf:
@@ -19,16 +20,16 @@ class imu_tf:
         #### parameters #######
         self.rate = rospy.get_param('~rate',10.0)  # the rate at which to publish the transform
         self.imu = Imu()
-        self.mag = MagneticField()
+        
         # subscribers
         rospy.Subscriber("mpu/quat", Quaternion, self.quatCallback)
         rospy.Subscriber("mpu/accel", Vector3, self.accelCallback)
         rospy.Subscriber("mpu/rpy", Vector3, self.rpyCallback)
-        rospy.Subscriber("mag", Vector3, self.magCallback)
+        rospy.Subscriber("mag/heading", Float32, self.headingCallback)
         
         # publishers
-        self.imuPub = rospy.Publisher("imu/data_raw", Imu, queue_size = 10)
-        self.magPub = rospy.Publisher("imu/mag", MagneticField, queue_size = 10)
+        self.imuPub = rospy.Publisher("imu/data", Imu, queue_size = 10)
+        self.imuEarthPub = rospy.Publisher("imu/earth", Imu, queue_size = 10)
         
     #############################################################################
     def spin(self):
@@ -44,9 +45,6 @@ class imu_tf:
         self.imu.header.frame_id = "imu_link"
         self.imu.header.stamp = rospy.Time.now()
         self.imuPub.publish(self.imu)
-        self.mag.header.frame_id = "mag_link"
-        self.mag.header.stamp = rospy.Time.now()
-        self.magPub.publish(self.mag)
             
     #############################################################################
     def quatCallback(self, msg):
@@ -68,10 +66,17 @@ class imu_tf:
         self.imu.angular_velocity = msg
         
     #############################################################################
-    def magCallback(self, msg):
+    def headingCallback(self, msg):
     #############################################################################
-        self.mag.magnetic_field = msg    
-
+        imu_earth = Imu()
+        imu_earth.header.frame_id = "odom"
+        imu_earth.header.stamp = rospy.Time.now()
+        imu_earth.orientation.x = 0
+        imu_earth.orientation.y = 0
+        imu_earth.orientation.z = sin(msg.data / 2)
+        imu_earth.orientation.w = cos(msg.data / 2)
+        self.imuEarthPub.publish(imu_earth)
+        
 #############################################################################
 #############################################################################        
 if __name__ == "__main__":
