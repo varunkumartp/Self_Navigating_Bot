@@ -2,10 +2,10 @@
 
 import serial
 import rospy
+from math import sin, cos
 from std_msgs.msg import Float32
 from sensor_msgs.msg import NavSatFix
 from geometry_msgs.msg import Quaternion, PoseStamped
-import numpy as np
  
 #############################################################################
 class gps_tf:
@@ -26,8 +26,8 @@ class gps_tf:
         self.serialPort = serial.Serial(port = "/dev/ttyAMA1", baudrate=9600, bytesize=8, timeout=2)
                 
         # subscriptions
-        rospy.Subscriber("mpu/quat", Quaternion, self.quatCallback)
-        
+        rospy.Subscriber("mag/heading", Float32, self.headingCallback)
+                
         #Publishers
         self.gps_goal_fix = rospy.Publisher("gps_goal_fix", NavSatFix, queue_size = 10)
         self.gps_goal_pose = rospy.Publisher("gps_goal_pose", PoseStamped, queue_size = 10)
@@ -78,14 +78,11 @@ class gps_tf:
         #rospy.loginfo("latitude = %f - longitude = %f",self.latitude, self.longitude)     
 
     #############################################################################
-    def quatCallback(self, msg):
+    def headingCallback(self, msg):
     #############################################################################
-        qArray = [msg.x, msg.y, msg.z, msg.w]/np.linalg.norm([msg.x, msg.y, msg.z, msg.w])
-        self.quaternion.x = qArray[0]
-        self.quaternion.y = -qArray[1]
-        self.quaternion.z = -qArray[2]
-        self.quaternion.w = qArray[3]
-    
+        self.quaternion.z = sin(msg.data / 2)
+        self.quaternion.w = cos(msg.data / 2)
+        
 #############################################################################
 #############################################################################
 if __name__ == '__main__':
