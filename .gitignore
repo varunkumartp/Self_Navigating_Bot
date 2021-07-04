@@ -1,5 +1,7 @@
-arduino/
-.vscode/
-offsets.txt
-pywhatkit_dbs.txt
-scripts/pswrd_gen.py
+# arduino/final
+# arduino/final_no_PID
+# arduino/mpu
+# .vscode/
+# offsets.txt
+# pywhatkit_dbs.txt
+# scripts/pswrd_gen.py
