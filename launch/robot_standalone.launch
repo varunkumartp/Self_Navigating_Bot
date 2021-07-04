@@ -9,20 +9,21 @@
   <param name="/use_sim_time" value="$(arg simulation)"/>
   <param name="robot_description" textfile="$(find navigator_bringup)/urdf/robotr_description.urdf" />
 
-  <!-- Use this when only encoder ticks are used for orientation -->
-  <!-- <node pkg="navigator_bringup"     type="diff_tf.py"             name="diff_tf"         output="screen"/>  -->
-  <!-- Use this when an IMU is used for orientation-->
+  <node pkg="rostopic" type="rostopic" name="rostopic" args="pub /control std_msgs/Int16 'data: '$(arg control)''"/>
+
   
   <group if="$(eval arg('control')==0)">
     <node pkg="navigator_bringup"     type="twist_to_motors.py"     name="twist_to_motors" output="screen"/>
     <node pkg="navigator_bringup"     type="ultrasound.py"          name="ultrasound"      output="screen"/>
-    <node pkg="navigator_bringup"     type="gps_tf.py"              name="gps_tf"          output="screen"/>
-    <node pkg="navigator_bringup"     type="keypad.py"              name="keypad"          output="screen"/>
+    <!-- <node pkg="navigator_bringup"     type="gps_tf.py"              name="gps_tf"          output="screen"/>
+    <node pkg="navigator_bringup"     type="keypad.py"              name="keypad"          output="screen"/> -->
   </group>
   
-  <node pkg="navigator_bringup"     type="diff_tfq.py"            name="diff_tfq"        output="screen">
-    <param name="control_bit"   value="$(arg control)"/>
-  </node>  
+  <!-- Use this when only encoder ticks are used for orientation -->
+  <!-- <node pkg="navigator_bringup"     type="diff_tf.py"             name="diff_tf"         output="screen"/>  -->
+  <!-- Use this when an IMU is used for orientation-->
+  <node pkg="navigator_bringup"     type="diff_tfq.py"            name="diff_tfq"        output="screen"/>  
+  <node pkg="navigator_bringup"     type="imu_tf.py"              name="imu_tf"          output="screen"/>
   
   <node pkg="rosserial_python"      type="serial_node.py"         name="serial_nano"     output="screen">
     <param name="baud"  value="115200"/>
@@ -30,12 +31,12 @@
   </node>
   
   <node pkg="rosserial_python"      type="serial_node.py"         name="serial_uno"      output="screen">
-    <param name="baud"  value="57600"/>
+    <param name="baud"  value="115200"/>
     <param name="port"  value="/dev/ttyACM0"/>
   </node>
   
   <node pkg="robot_state_publisher" type="robot_state_publisher"  name="robot_state_publisher">
     <param name="publish_frequency" type="double" value="5.0" />
   </node>
-  
+
 </launch>
