@@ -23,10 +23,10 @@ class imu_tf:
         self.imu = Imu()
         
         # subscribers
-        rospy.Subscriber("mpu/quat", Quaternion, self.quatCallback)
+        rospy.Subscriber("imu/quat", Quaternion, self.quatCallback)
         rospy.Subscriber("mpu/accel", Vector3, self.accelCallback)
         rospy.Subscriber("mpu/rpy", Vector3, self.rpyCallback)
-        rospy.Subscriber("mag/heading", Float32, self.headingCallback)
+        rospy.Subscriber("imu/heading", Float32, self.headingCallback)
         
         # publishers
         self.imuPub = rospy.Publisher("imu/data", Imu, queue_size = 10)

@@ -26,7 +26,9 @@ class gps_tf:
         self.serialPort = serial.Serial(port = "/dev/ttyAMA1", baudrate=9600, bytesize=8, timeout=2)
                 
         # subscriptions
-        rospy.Subscriber("mag/heading", Float32, self.headingCallback)
+        rospy.Subscriber("imu/heading", Float32, self.headingCallback)
+        rospy.Subscriber("coordinates/lat", Float32, self.latCallback)
+        rospy.Subscriber("coordinates/lon", Float32, self.lonCallback)
                 
         #Publishers
         self.gps_goal_fix = rospy.Publisher("gps_goal_fix", NavSatFix, queue_size = 10)
@@ -38,7 +40,6 @@ class gps_tf:
     #############################################################################
         r = rospy.Rate(10)
         while not rospy.is_shutdown():
-            self.get_gps()
             self.update()
             r.sleep()
      
@@ -66,23 +67,21 @@ class gps_tf:
         self.gps_goal_fix.publish(navsatfix)
     
     #############################################################################
-    def get_gps(self):
-    #############################################################################
-        if(self.serialPort.in_waiting > 0):
-            a = self.serialPort.readline().decode('ascii', errors='replace')
-            for line in a.split('\n') :
-                if line.startswith( '$GPGGA' ) :
-                    lat, _, lon = line.strip().split(',')[2:5]
-                    self.latitude = round(float(lat)/100,6)
-                    self.longitude = round(float(lon)/100,6)
-        #rospy.loginfo("latitude = %f - longitude = %f",self.latitude, self.longitude)     
-
-    #############################################################################
     def headingCallback(self, msg):
     #############################################################################
         self.quaternion.z = sin(msg.data / 2)
         self.quaternion.w = cos(msg.data / 2)
         
+    #############################################################################
+    def latCallback(self, msg):
+    #############################################################################
+        self.latitude = msg.data
+        
+    #############################################################################
+    def lonCallback(self, msg):
+    #############################################################################
+        self.longitude = msg.data
+            
 #############################################################################
 #############################################################################
 if __name__ == '__main__':

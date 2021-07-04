@@ -58,7 +58,7 @@ class DiffTfq:
         # subscriptions
         rospy.Subscriber("encoder_ticks/lwheel", Int16, self.lwheelCallback)
         rospy.Subscriber("encoder_ticks/rwheel", Int16, self.rwheelCallback)
-        rospy.Subscriber("mpu/quat", Quaternion, self.quatCallback)
+        rospy.Subscriber("imu/quat", Quaternion, self.quatCallback)
         
         # Publishers
         self.odomPub = rospy.Publisher("odom", Odometry,queue_size=10)
