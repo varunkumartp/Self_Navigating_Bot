@@ -2,6 +2,7 @@
 
 import rospy
 import numpy as np
+from math import sin, cos
 from geometry_msgs.msg import Quaternion, Vector3
 from sensor_msgs.msg import Imu
 from std_msgs.msg import Float32
@@ -58,12 +59,16 @@ class imu_tf:
     #############################################################################
     def accelCallback(self, msg):
     #############################################################################
-        self.imu.linear_acceleration = msg
+        self.imu.linear_acceleration.x = msg.x
+        self.imu.linear_acceleration.y = -msg.x
+        self.imu.linear_acceleration.z = -msg.z
         
     #############################################################################
     def rpyCallback(self, msg):
     #############################################################################
-        self.imu.angular_velocity = msg
+        self.imu.angular_velocity.x = msg.x
+        self.imu.angular_velocity.y = -msg.y
+        self.imu.angular_velocity.z = -msg.z
         
     #############################################################################
     def headingCallback(self, msg):
