@@ -14,7 +14,7 @@ class TwistToMotors():
     #############################################################
     def __init__(self):
     #############################################################
-        rospy.init_node("twist_to_motors")
+        rospy.init_node("twist_to_motors_pwm")
         self.nodename = rospy.get_name()
         rospy.loginfo("-I- %s started" % self.nodename)  #10260
         
@@ -22,7 +22,7 @@ class TwistToMotors():
     
         self.pub_lmotor = rospy.Publisher('lwheel_vtarget', Float32,queue_size=10)
         self.pub_rmotor = rospy.Publisher('rwheel_vtarget', Float32,queue_size=10)
-        rospy.Subscriber('/cmd_vel', Twist, self.twistCallback)
+        rospy.Subscriber('/cmd_vel/mobile', Twist, self.twistCallback)
     
         self.dia = rospy.get_param("~diametre",0.066)
         self.rate = rospy.get_param("~rate", 50)
@@ -59,8 +59,8 @@ class TwistToMotors():
         self.left = self.left * 60 / ( self.dia * math.pi )
         self.right = self.right * 60 / ( self.dia * math.pi )
         #rospy.loginfo("RPM = (%d, %d)", self.left, self.right)       
-        self.pub_lmotor.publish(self.map(self.left, -83, 83, -150, 150))
-        self.pub_rmotor.publish(self.map(self.right, -83, 83, -150, 150))
+        self.pub_lmotor.publish(self.map(self.left, -95, 95, -150, 150))
+        self.pub_rmotor.publish(self.map(self.right, -95, 95, -150, 150))
         self.ticks_since_target += 1
 
     #############################################################
