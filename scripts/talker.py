@@ -16,5 +16,7 @@ def talker():
 if __name__ == '__main__':
     try:
         talker()
-    except rospy.ROSInterruptException:
+    except (rospy.ROSInterruptException, KeyboardInterrupt):
         pass
+    finally:
+        print("lalalallalalalalala")
