@@ -3,3 +3,4 @@ arduino/
 offsets.txt
 pywhatkit_dbs.txt
 scripts/pswrd_gen.py
+launch/mapping.launch

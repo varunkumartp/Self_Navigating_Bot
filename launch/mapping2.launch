@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!--
+  Used to launch the 3dsensor launch file and rtabmap-slam
+-->
+<launch>
+  <include file="$(find navigator_bringup)/launch/3dsensor.launch">
+    <arg name="scan_topic"         value="/scan" />
+    <arg name="rgb_processing"     value="false" />
+    <arg name="depth_processing"   value="false" />
+    <arg name="depth_registration" value="false" />
+  </include>
+  
+  <!-- Localization-only mode -->
+  <arg name="visual_odometry"       default="false"/>      
+  <arg name="icp_odometry"          default="false"/>   
+  <arg name="odom_topic"            default="odom"/>     
+  <arg name="localization"          default="false"/>
+  <arg     if="$(arg localization)" name="rtabmap_args"  default=""/>
+  <arg unless="$(arg localization)" name="rtabmap_args"  default="--delete_db_on_start"/>
+  
+
+  <group ns="rtabmap">
+    <node name="rtabmap" pkg="rtabmap_ros" type="rtabmap" output="screen" args="--delete_db_on_start">
+      <param name="frame_id" type="string" value="base_footprint"/>
+
+      <param name="subscribe_depth" type="bool" value="true"/>
+      <param name="subscribe_scan"  type="bool" value="true"/>
+
+      <remap from="odom"            to="/odom"/>
+      <remap from="scan"            to="/scan"/>
+      <remap from="rgb/image"       to="/camera/rgb/image_raw"/>
+      <remap from="depth/image"     to="/camera/depth/image_raw"/>
+      <remap from="rgb/camera_info" to="/camera/rgb/camera_info"/>
+      <remap from="grid_map"        to="/map"/>
+
+      <param name="queue_size" type="int" value="10"/>
+
+      <!-- RTAB-Map's parameters -->
+      <param name="RGBD/ProximityBySpace"     type="string" value="false"/>
+      <param name="RGBD/AngularUpdate"        type="string" value="0.01"/>
+      <param name="RGBD/LinearUpdate"         type="string" value="0.01"/>
+      <param name="RGBD/OptimizeFromGraphEnd" type="string" value="false"/>
+      <param name="Reg/Force3DoF"             type="string" value="true"/>
+      <param name="Vis/MinInliers"            type="string" value="12"/>
+    </node>
+  </group>
+  
+  <node pkg="nodelet" type="nodelet" name="points_xyzrgb" args="standalone rtabmap_ros/point_cloud_xyzrgb">
+    <remap from="rgb/image"       to="/camera/rgb/image_raw"/>
+    <remap from="depth/image"     to="/camera/depth/image_raw"/>
+    <remap from="rgb/camera_info" to="/camera/rgb/camera_info"/>    
+    <param name="queue_size" type="int" value="10"/>
+  </node>
+
+</launch>
