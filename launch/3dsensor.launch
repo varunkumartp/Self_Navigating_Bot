@@ -52,7 +52,6 @@
            return the minimum value for those pixels centered vertically in the image. -->
       <param name="scan_height"     value="10"/>
       <param name="output_frame_id" value="base_footprint"/>
-      <param name="range_min"       value="0.45"/>
       <remap from="image"           to="$(arg camera)/$(arg depth)/image_raw"/>
 
       <!-- Somehow topics here get prefixed by "$(arg camera)" when not inside an app namespace,
