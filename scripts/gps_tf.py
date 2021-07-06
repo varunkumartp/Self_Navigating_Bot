@@ -21,10 +21,7 @@ class gps_tf:
         self.latitude = 0
         self.longitude = 0
         self.quaternion = Quaternion(0,0,0,1)
-        
-        # serial port
-        self.serialPort = serial.Serial(port = "/dev/ttyAMA1", baudrate=9600, bytesize=8, timeout=2)
-                
+                       
         # subscriptions
         rospy.Subscriber("imu/heading", Float32, self.headingCallback)
         rospy.Subscriber("coordinates/lat", Float32, self.latCallback)
