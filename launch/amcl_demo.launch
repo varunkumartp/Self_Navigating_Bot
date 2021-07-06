@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <launch>
+
   <!-- 3D sensor -->
   <include file="$(find navigator_bringup)/launch/3dsensor.launch">
     <arg name="rgb_processing" value="false" />
@@ -13,21 +14,42 @@
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
   <!-- AMCL -->
-  <arg name="custom_amcl_launch_file" default="$(find navigator_bringup)/launch/includes/amcl.launch.xml"/>
-  <arg name="initial_pose_x" default="0.0"/> <!-- Use 17.0 for willow's map in simulation -->
-  <arg name="initial_pose_y" default="0.0"/> <!-- Use 17.0 for willow's map in simulation -->
-  <arg name="initial_pose_a" default="0.0"/>
-  <include file="$(arg custom_amcl_launch_file)">
-    <arg name="initial_pose_x" value="$(arg initial_pose_x)"/>
-    <arg name="initial_pose_y" value="$(arg initial_pose_y)"/>
-    <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>
-  </include>
+  <node pkg="amcl" type="amcl" name="amcl">
+    <remap from="scan"            to="/scan"/>
+    <param name="use_map_topic"   value="false"/>
+    <param name="odom_frame_id"   value="odom"/>
+    <param name="base_frame_id"   value="base_footprint"/>
+    <param name="global_frame_id" value="map"/>
+    <param name="odom_model_type" value="diff"/>
+    
+    <!-- Define initial pose here -->
+    <param name="initial_pose_x"  value="0.0"/>
+    <param name="initial_pose_y"  value="0.0"/>
+    <param name="initial_pose_a"  value="0.0"/>
+    <param name="initial_cov_xx"  value="0.0005"/>
+    <param name="initial_cov_yy"  value="0.0005"/>
+    <param name="initial_cov_aa"  value="0.0005"/>
 
-  <!-- Move base -->
-  <!-- <arg name="custom_param_file" default="$(find navigator_bringup)/param3/kinect_costmap_params.yaml"/> -->
-  <include file="$(find navigator_bringup)/launch/includes/move_base.launch.xml">
-    <!-- <arg name="custom_param_file" value="$(arg custom_param_file)"/> -->
-  </include>
+    <!-- Movement -->
+    <param name="update_min_d"    value="0.05"/>
+    <param name="update_min_a"    value="0.1"/>
+
+    <!-- Define particle size -->	
+    <param name="min_particles"   value="100"/>
+    <param name="max_particles"   value="1000"/>
+
+    <!-- Laser parameters -->	
+    <param name="laser_min_range" value="0.005"/>
+    <param name="laser_max_range" value="30.0"/>
+    <param name="laser_max_beams" value="50"/>
+
+    <!-- Odometry parameters -->
+    <param name="odom_model_type" value="diff-corrected"/>
+    <param name="odom_alpha1"     value="0.05"/>	
+    <param name="odom_alpha2"     value="0.05"/>
+    <param name="odom_alpha3"     value="0.05"/>
+    <param name="odom_alpha4"     value="0.05"/>
+  </node>
 
 </launch>
 
