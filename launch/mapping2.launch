@@ -52,4 +52,6 @@
     <param name="queue_size" type="int" value="10"/>
   </node>
 
+  <node pkg="rviz" name="rviz" type="rviz" args="-d $(find navigator_bringup)/rviz/robot_mapping.rviz" output="log"/>  
+
 </launch>

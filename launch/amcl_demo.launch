@@ -10,7 +10,7 @@
   </include>
 
   <!-- Map server -->
-  <arg name="map_file" default="$(find navigator_bringup)/maps/mymap1.yaml"/> 
+  <arg  name="map_file"   default="$(find navigator_bringup)/maps/mymap.yaml"/> 
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
   <!-- AMCL -->
@@ -50,6 +50,9 @@
     <param name="odom_alpha3"     value="0.05"/>
     <param name="odom_alpha4"     value="0.05"/>
   </node>
+  
+  <include file="$(find navigator_bringup)/launch/move_base.launch"/>
+  <node pkg="rviz" name="rviz" type="rviz" args="-d $(find navigator_bringup)/rviz/robot_mapping.rviz" output="log"/>  
 
 </launch>
 

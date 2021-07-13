@@ -20,8 +20,8 @@ class TwistToMotors():
         
         self.w = rospy.get_param("~base_width", 0.24)
     
-        self.pub_lmotor = rospy.Publisher('motors/lwheel_vtarget', Float32,queue_size=10)
-        self.pub_rmotor = rospy.Publisher('motors/rwheel_vtarget', Float32,queue_size=10)
+        self.pub_lmotor = rospy.Publisher('motors/vtarget/lwheel', Float32,queue_size=10)
+        self.pub_rmotor = rospy.Publisher('motors/vtarget/rwheel', Float32,queue_size=10)
         rospy.Subscriber('/cmd_vel', Twist, self.twistCallback)
     
         self.dia = rospy.get_param("~diametre",0.066)
