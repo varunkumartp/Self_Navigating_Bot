@@ -5,7 +5,7 @@ global_costmap:
   publish_frequency: 0.5
   static_map: true
   # rolling_window: true
-  transform_tolerance: 0.5
+  transform_tolerance: 1.0
    
   # plugins:
   #   - {name: obstacle_layer,          type: "costmap_2d::VoxelLayer"}
