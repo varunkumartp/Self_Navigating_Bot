@@ -1,5 +1,10 @@
 <?xml version="1.0"?>
 <launch>
+  
+  <!-- Mapping -->
+  <include file="$(find navigator_bringup)/launch/mapping.launch"/>
+
+  <!-- Move Base node   -->
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
     <param name="base_global_planner" type="string" value="navfn/NavfnROS" />
     <param name="base_local_planner" type="string"  value="base_local_planner/TrajectoryPlannerROS"/>
@@ -18,4 +23,5 @@
     <remap from="scan" to="/scan"/>
 
   </node>
+
 </launch>
