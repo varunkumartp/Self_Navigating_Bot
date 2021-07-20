@@ -7,8 +7,9 @@ Open source Self-Navigating Bot implemented in ROS using Kinect sensor and ultra
 ```bash
 # open four terminals
 cd ~/project
-source devel/setup.bash
+
 # source all the terminals
+source devel/setup.bash
 
 # Terminal 1
 roslaunch navigator_bringup robot_standalone.launch
@@ -27,8 +28,9 @@ rosrun map_server map_saver -f ~/project/src/Self_Navigating_Bot/navigator_navig
 ```bash
 # open two terminals
 cd ~/project
-source devel/setup.bash
+
 # source all the terminals
+source devel/setup.bash
 
 # Terminal 1
 roslaunch navigator_bringup robot_standalone.launch
@@ -41,8 +43,9 @@ roslaunch navigator_sonar auto.launch
 ```bash
 # open two terminals
 cd ~/project
-source devel/setup.bash
+
 # source all the terminals
+source devel/setup.bash
 
 # Terminal 1
 roslaunch navigator_bringup robot_standalone.launch
