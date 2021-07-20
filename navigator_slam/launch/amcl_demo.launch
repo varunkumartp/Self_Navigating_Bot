@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!-- 
+  Launch file to start the 3d sensor, Rviz and AMCL node
+ -->
+<launch>
+
+  <!-- 3D sensor -->
+  <include file="$(find navigator_bringup)/launch/3dsensor.launch">
+    <arg name="rgb_processing" value="false" />
+    <arg name="depth_registration" value="false" />
+    <arg name="depth_processing" value="false" />
+    <arg name="scan_topic" value="/scan" />
+  </include>
+
+  <!-- Map server -->
+  <arg  name="map_file"   default="$(find navigator_navigation)/maps/mymap.yaml"/> 
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+
+  <!-- AMCL -->
+  <node pkg="amcl" type="amcl" name="amcl">
+    <remap from="scan"            to="/scan"/>
+    <param name="use_map_topic"   value="false"/>
+    <param name="odom_frame_id"   value="odom"/>
+    <param name="base_frame_id"   value="base_footprint"/>
+    <param name="global_frame_id" value="map"/>
+    <param name="odom_model_type" value="diff"/>
+    <param name="transform_tolerance" value="0.3"/>
+    
+    <!-- Define initial pose here -->
+    <param name="initial_pose_x"  value="0.0"/>
+    <param name="initial_pose_y"  value="0.0"/>
+    <param name="initial_pose_a"  value="0.0"/>
+    <param name="initial_cov_xx"  value="0.0005"/>
+    <param name="initial_cov_yy"  value="0.0005"/>
+    <param name="initial_cov_aa"  value="0.0005"/>
+
+    <!-- Movement -->
+    <param name="update_min_d"    value="0.05"/>
+    <param name="update_min_a"    value="0.1"/>
+
+    <!-- Define particle size -->	
+    <param name="min_particles"   value="100"/>
+    <param name="max_particles"   value="1000"/>
+
+    <!-- Laser parameters -->	
+    <param name="laser_min_range" value="0.005"/>
+    <param name="laser_max_range" value="30.0"/>
+    <param name="laser_max_beams" value="50"/>
+
+    <!-- Odometry parameters -->
+    <param name="odom_model_type" value="diff-corrected"/>
+    <param name="odom_alpha1"     value="0.05"/>	
+    <param name="odom_alpha2"     value="0.05"/>
+    <param name="odom_alpha3"     value="0.05"/>
+    <param name="odom_alpha4"     value="0.05"/>
+  </node>
+
+</launch>
+

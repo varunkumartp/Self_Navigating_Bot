@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+  Used to launch all the nodes that support hardware and to use the urdf file
+  -->
+<launch>
+  <param name="robot_description" textfile="$(find navigator_description)/urdf/navigator_description.urdf" />
+  <rosparam param="/use_sim_time">false</rosparam>
+  
+  <node pkg="navigator_sonar"   type="ultrasound.py"             name="ultrasound"                output="log"/>
+  
+  <!-- Manual mode -->
+  <node pkg="navigator_bringup"     type="diff_tfq.py"               name="diff_tfq"                  output="screen"/>  
+  <node pkg="navigator_bringup"     type="navigator_teleop_phone.py" name="navigator_teleop_phone"    output="screen"/>
+  <node pkg="navigator_bringup"     type="twist_to_motors.py"        name="twist_to_motors"           output="screen"/>
+    
+  <!-- Serial connection for arduino nano -->
+  <node pkg="rosserial_python"      type="serial_node.py"            name="serial_nano"               output="screen">
+    <param name="baud"              value="115200"/>
+    <param name="port"              value="/dev/ttyUSB0"/>
+  </node>
+  
+  <!-- Serial connection for arduino uno -->
+  <node pkg="rosserial_python"      type="serial_node.py"            name="serial_uno"               output="screen">
+    <param name="baud"              value="115200"/>
+    <param name="port"              value="/dev/ttyACM0"/>
+  </node>
+
+  <!-- URDF -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher"     name="robot_state_publisher">
+    <param name="publish_frequency" type="double"                    value="5.0" />
+  </node>
+
+</launch>
