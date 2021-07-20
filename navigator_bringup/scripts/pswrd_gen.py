@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+# script sends otp to user via whatsapp
+# 3 chances are given to the user to enter correct opt
+# after 3 tries a message is sent to the admin
 import pywhatkit
 import random
 import rospy
