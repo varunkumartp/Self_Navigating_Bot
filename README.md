@@ -81,5 +81,3 @@ roslaunch navigator_bringup robot_standalone.launch
 # Terminal 2
 roslaunch navigator_navigation sman.launch
 ```
-
-
