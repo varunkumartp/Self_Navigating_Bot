@@ -3,10 +3,8 @@
   Used to launch all the nodes that support hardware and to use the urdf file
   -->
 <launch>
-  <param name="robot_description" textfile="$(find navigator_bringup)/urdf/navigator_description.urdf" />
+  <param name="robot_description" textfile="$(find navigator_description)/urdf/navigator_description.urdf" />
   <rosparam param="/use_sim_time">false</rosparam>
-  
-  <node pkg="navigator_bringup"   type="ultrasound.py"             name="ultrasound"                output="log"/>
   
   <!-- Manual mode -->
   <node pkg="navigator_bringup"     type="diff_tfq.py"               name="diff_tfq"                  output="screen"/>  

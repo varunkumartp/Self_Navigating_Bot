@@ -4,5 +4,5 @@
 -->
 <launch>
   <!-- RViz -->
-  <node pkg="rviz" name="rviz" type="rviz" args="-d $(find navigator_bringup)/rviz/robot_mapping.rviz" output="screen"/>
+  <node pkg="rviz" name="rviz" type="rviz" args="-d $(find navigator_slam)/rviz/robot_mapping.rviz" output="screen"/>
 </launch>

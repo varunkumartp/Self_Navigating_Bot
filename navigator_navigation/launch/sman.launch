@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!-- 
+  Launch file to start Simultaneous mapping and Autonomous navigation using a map 
+  -->
+<launch>
+  
+  <!-- Mapping -->
+  <include file="$(find navigator_slam)/launch/mapping.launch"/>
+
+  <!-- Move Base node   -->
+  <include file="$(find navigator_navigation)/launch/move_base.launch"/>
+
+  <!-- RVIZ -->
+  <node pkg="rviz" name="rviz" type="rviz" args="-d $(find navigator_slam)/rviz/robot_mapping.rviz" output="log"/>  
+
+</launch>

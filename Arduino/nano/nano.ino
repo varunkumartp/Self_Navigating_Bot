@@ -1,5 +1,7 @@
 // final nano
 // An arduino mega can be used and both the uno and nano can be combined to form a single code 
+#include <Wire.h>
+#include <MechaQMC5883.h>
 #include <rosnano.h>
 #include <std_msgs/Int16.h>
 #include <std_msgs/Float32.h>
@@ -18,10 +20,12 @@ ros::NodeHandle  nh;
 
 std_msgs::Int16 lwheelMsg;
 std_msgs::Int16 rwheelMsg;
+std_msgs::Float32 yaw;
 
 //Publisher buffer 200 bytes
 ros::Publisher lwheelPub("encoder_ticks/lwheel", &lwheelMsg);
 ros::Publisher rwheelPub("encoder_ticks/rwheel", &rwheelMsg);
+ros::Publisher headingPub("imu/yaw", &yaw);
 
 // Subscribers buffer 200 bytes
 ros::Subscriber<std_msgs::Float32> lwheel_vel("motors/vtarget/lwheel", &lwheel_callback );
@@ -48,6 +52,9 @@ ros::Subscriber<std_msgs::Int16> rwheel_pwm("motors/pwm/rwheel", &rwheel_pwm_cal
 // Encoder pins
 #define lencoder 3
 #define rencoder 2
+
+// magnetometer object
+MechaQMC5883  qmc;
 
 // Direction of wheels (true = forward && false = backward)
 bool lstat = true;
@@ -189,6 +196,14 @@ ISR(TIMER1_COMPA_vect)  // timer interrupt
   }
 }
 
+void getHeading()
+{
+  int x, y, z;
+  qmc.read(&x, &y, &z);
+  yaw.data = atan2(x,y);
+  headingPub.publish(&yaw);
+}
+
 void setup()
 {
   nh.getHardware()->setBaud(115200);
@@ -235,6 +250,7 @@ void loop()
     Rencoder();
   }
   rprev = rcur;
+  getHeading();
   nh.spinOnce();
   delay(1);
 }
