@@ -1,29 +1,5 @@
-# Self-Navigating Bot
-Open source Self-Navigating Bot implemented in ROS using Kinect sensor.
-
-## Prerequisites
-Install the [ROS Noetic](http://wiki.ros.org/noetic/Installation/Ubuntu) framework for Ubuntu 20.04.
-
-## Setup
-### Create a workspace
-``` bash
-mkdir -p ~/project/src
-cd ~/project/src
-```
-### Clone the git repository into the src folder
-```bash
-# Git must be installed
-git clone https://github.com/varun-kumar-tp/Self_Navigating_Bot.git
-# Installs the dependencies required for successful catkin_make
-Self_Navigating_Bot/dependencies.sh
-# Clones the required packages from github into the src folder 
-Self_Navigating_Bot/packages.sh
-cd ..
-# Build the code
-catkin_make
-# If no errors run
-source devel/setup.bash
-```
+# Self-Navigating Bot using Ultrasonic Sensors
+Open source Self-Navigating Bot implemented in ROS using Kinect sensor and ultrasonic sensors. The objects that will be in the range of the ultrasonic sensors will also be considered in the local costmap and will be avoided.
 
 ## Implementation
 
@@ -58,7 +34,7 @@ source devel/setup.bash
 roslaunch navigator_bringup robot_standalone.launch
 
 # Terminal 2
-roslaunch navigator_navigation auto.launch
+roslaunch navigator_sonar auto.launch
 ```
 
 ### Simultaneous Mapping and Autonomous Navigation
@@ -72,7 +48,7 @@ source devel/setup.bash
 roslaunch navigator_bringup robot_standalone.launch
 
 # Terminal 2
-roslaunch navigator_navigation sman.launch
+roslaunch navigator_sonar sman.launch
 ```
 
 
