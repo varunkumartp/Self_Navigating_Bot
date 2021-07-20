@@ -39,6 +39,7 @@ inflation_layer:
 static_layer:
   enabled:              true
 
+# uncomment the below code to visualize ultrasound data in rviz(range_sensor_layer must be installed)
 # range_sensor_layer:
 #   clear_threshold:    0.46
 #   mark_threshold:     0.98

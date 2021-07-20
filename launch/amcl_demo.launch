@@ -1,4 +1,7 @@
 <?xml version="1.0"?>
+<!-- 
+  Launch file to start the 3d sensor, Rviz and AMCL node
+ -->
 <launch>
 
   <!-- 3D sensor -->
@@ -10,7 +13,7 @@
   </include>
 
   <!-- Map server -->
-  <arg  name="map_file"   default="$(find navigator_bringup)/maps/mymap1.yaml"/> 
+  <arg  name="map_file"   default="$(find navigator_bringup)/maps/mymap.yaml"/> 
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
   <!-- AMCL -->

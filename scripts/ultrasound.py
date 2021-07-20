@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+# obstacle avoider script
+# arduino must publish ultrasound sensor readings
+# it also publishes Range message to visualize ultrasound readings in rviz(range_sensor_layer plugin must be installed)
+
 import rospy
 from std_msgs.msg import Float32, Int16
 from sensor_msgs.msg import Range

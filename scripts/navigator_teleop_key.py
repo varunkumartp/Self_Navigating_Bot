@@ -1,19 +1,21 @@
 #!/usr/bin/env python
 
+# sends twist messages on cmd_vel topic
+
 from __future__ import print_function
-
 import rospy
-
+import sys, select, termios, tty
 from geometry_msgs.msg import Twist
 
-import sys, select, termios, tty
-
+#############################################################################
 MAX_LIN_SPEED = 0.37
 MIN_LIN_SPEED = 0.25
 
+#############################################################################
 MAX_ANG_SPEED = 3
 MIN_ANG_SPEED = 1.5
 
+#############################################################################
 msg = """
 Reading from the keyboard  and Publishing to Twist!
 ---------------------------
@@ -27,8 +29,9 @@ q/z : increase/decrease max speeds by 10%
 w/x : increase/decrease only linear speed by 10%
 e/c : increase/decrease only angular speed by 10%
 CTRL-C to quit
-"""
+""" 
 
+#############################################################################
 moveBindings = {
         'i':(1,0,0,0),
         'j':(0,0,0,1),
@@ -40,6 +43,7 @@ moveBindings = {
         'm':(-1,0,0,-1)
     }
 
+#############################################################################
 speedBindings={
         'q':(0.005,0.05),
         'z':(-0.005,-0.05),
@@ -49,7 +53,9 @@ speedBindings={
         'c':(0,-0.05),
     }
 
+#############################################################################
 def checkLinVel(vel):
+#############################################################################
     if vel < MIN_LIN_SPEED:
         vel = MIN_LIN_SPEED
     elif vel > MAX_LIN_SPEED:
@@ -58,7 +64,9 @@ def checkLinVel(vel):
         vel = vel
     return vel
 
+#############################################################################
 def checkAngVel(vel):
+#############################################################################
     if vel < MIN_ANG_SPEED:
         vel = MIN_ANG_SPEED
     elif vel > MAX_ANG_SPEED:
@@ -67,22 +75,31 @@ def checkAngVel(vel):
         vel = vel
     return vel
 
+#############################################################################
 def getKey():
+#############################################################################
     tty.setraw(sys.stdin.fileno())
     select.select([sys.stdin], [], [], 0)
     key = sys.stdin.read(1)
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
     return key
 
-
+#############################################################################
 def vels(speed,turn):
+#############################################################################
     return "currently:\tspeed %s\tturn %s " % (speed,turn)
 
+#############################################################################
+#############################################################################
 if __name__=="__main__":
     settings = termios.tcgetattr(sys.stdin)
-
-    pub = rospy.Publisher('cmd_vel', Twist, queue_size = 50)
+    
     rospy.init_node('navigator_teleop')
+    nodename = rospy.get_name()
+    rospy.loginfo("-I- %s started" % nodename)
+    
+    # publisher    
+    pub = rospy.Publisher('cmd_vel', Twist, queue_size = 50)
 
     speed = rospy.get_param("~speed", 0.37)
     turn = rospy.get_param("~turn", 2.0)
@@ -95,7 +112,7 @@ if __name__=="__main__":
     try:
         print(msg)
         print(vels(speed,turn))
-        while(1):
+        while True:
             key=getKey()
             if key in moveBindings.keys():
                 x = moveBindings[key][0]

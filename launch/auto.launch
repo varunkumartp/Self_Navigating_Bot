@@ -1,27 +1,13 @@
 <?xml version="1.0"?>
+<!-- 
+  Launch file to start Autonomous navigation using a map 
+  -->
 <launch>
   
   <!-- Mapping -->
   <include file="$(find navigator_bringup)/launch/amcl_demo.launch"/>
 
   <!-- Move Base node   -->
-  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-    <param name="base_global_planner" type="string" value="navfn/NavfnROS" />
-    <param name="base_local_planner" type="string"  value="base_local_planner/TrajectoryPlannerROS"/>
-    
-    <rosparam file="$(find navigator_bringup)/params/costmap_common_params.yaml"       command="load" ns="global_costmap" />
-    <rosparam file="$(find navigator_bringup)/params/costmap_common_params.yaml"       command="load" ns="local_costmap" />   
-   
-    <rosparam file="$(find navigator_bringup)/params/local_costmap_params.yaml"        command="load" />   
-    <rosparam file="$(find navigator_bringup)/params/global_costmap_params.yaml"       command="load" />
-   
-    <rosparam file="$(find navigator_bringup)/params/base_local_planner_params.yaml"   command="load" />
-    <rosparam file="$(find navigator_bringup)/params/move_base_params.yaml"            command="load" />
-    
-    <remap from="cmd_vel" to="/cmd_vel"/>
-    <remap from="odom" to="/odom"/>
-    <remap from="scan" to="/scan"/>
-
-  </node>
+  <include file="$(find navigator_bringup)/launch/move_base.launch"/>
 
 </launch>

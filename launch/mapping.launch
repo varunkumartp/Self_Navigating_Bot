@@ -1,8 +1,10 @@
 <?xml version="1.0"?>
 <!--
-  Used to launch the 3dsensor launch file and rtabmap-slam
+  Launch file to start the 3dsensor, Rviz and rtabmap-slam
 -->
 <launch>
+
+  <!-- 3D sensor -->
   <include file="$(find navigator_bringup)/launch/3dsensor.launch">
     <arg name="scan_topic"         value="/scan" />
     <arg name="rgb_processing"     value="false" />
@@ -18,7 +20,7 @@
   <arg     if="$(arg localization)" name="rtabmap_args"  default=""/>
   <arg unless="$(arg localization)" name="rtabmap_args"  default="--delete_db_on_start"/>
   
-
+  <!-- RTAB-map SLAM -->
   <group ns="rtabmap">
     <node name="rtabmap" pkg="rtabmap_ros" type="rtabmap" output="screen" args="--delete_db_on_start">
       <param name="frame_id" type="string" value="base_footprint"/>
@@ -52,6 +54,7 @@
     <param name="queue_size" type="int" value="10"/>
   </node>
 
+  <!-- RViz -->
   <node pkg="rviz" name="rviz" type="rviz" args="-d $(find navigator_bringup)/rviz/robot_mapping.rviz" output="log"/>  
 
 </launch>

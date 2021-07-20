@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Used to launch freenect_launch and depthimage_to_laserscan
+  Launch file to start freenect_launch and depthimage_to_laserscan
 -->
 <launch>
   <!-- "camera" should uniquely identify the device. All topics are pushed down

@@ -1,28 +1,13 @@
 <?xml version="1.0"?>
 <!--
   Used to launch all the nodes that support hardware and to use the urdf file
-
-  mode arguement
-  1 : Mapping mode. Disables ultrasound sensors and gps script
-  0 : Autonomous mode. Enables ultrasound sensors and gps scripts.
--->
+  -->
 <launch>
-  <arg   name="mode"              default="false"/>
-  <arg   name="simulation"        default="$(optenv TURTLEBOT_SIMULATION false)"/>
   <param name="robot_description" textfile="$(find navigator_bringup)/urdf/navigator_description.urdf" />
-  <param name="/use_sim_time"     value="$(arg simulation)"/>
+  <rosparam param="/use_sim_time">false</rosparam>
   
-  <!-- Autonomous Mode -->
-  <group if="$(arg mode)">
-    <node pkg="navigator_bringup"     type="gps_tf.py"                 name="gps_tf"                   output="screen"/>
-    <node pkg="navigator_bringup"     type="ultrasound.py"             name="ultrasound"               output="log"/>
-    <!-- Serial connection for arduino uno (gps and ultrasound only) -->
-    <node pkg="rosserial_python"      type="serial_node.py"            name="serial_uno"               output="screen">
-      <param name="baud"              value="57600"/>
-      <param name="port"              value="/dev/ttyACM0"/>
-    </node>
-  </group>
-
+  <node pkg="navigator_bringup"   type="ultrasound.py"             name="ultrasound"                output="log"/>
+  
   <!-- Manual mode -->
   <node pkg="navigator_bringup"     type="diff_tfq.py"               name="diff_tfq"                  output="screen"/>  
   <node pkg="navigator_bringup"     type="navigator_teleop_phone.py" name="navigator_teleop_phone"    output="screen"/>
@@ -30,13 +15,16 @@
     
   <!-- Serial connection for arduino nano -->
   <node pkg="rosserial_python"      type="serial_node.py"            name="serial_nano"               output="screen">
-    <param name="baud"              value="57600"/>
+    <param name="baud"              value="115200"/>
     <param name="port"              value="/dev/ttyUSB0"/>
   </node>
+  
+  <!-- Serial connection for arduino uno -->
   <node pkg="rosserial_python"      type="serial_node.py"            name="serial_uno"               output="screen">
-    <param name="baud"              value="57600"/>
+    <param name="baud"              value="115200"/>
     <param name="port"              value="/dev/ttyACM0"/>
   </node>
+
   <!-- URDF -->
   <node pkg="robot_state_publisher" type="robot_state_publisher"     name="robot_state_publisher">
     <param name="publish_frequency" type="double"                    value="5.0" />

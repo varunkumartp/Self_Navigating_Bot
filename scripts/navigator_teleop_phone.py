@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
 # Used to control the bot using the ROS-mobile app availbale in play store
+# Buttons must be added in the ROS-mobile app. Check ros_mobile_button_layout picture in images folder for button layout reference
 
 import rospy
-from std_msgs.msg import String, Bool
+from std_msgs.msg import Int16, Bool
 
 #############################################################
 class navigator_teleop_phone():
@@ -16,12 +17,6 @@ class navigator_teleop_phone():
         self.nodename = rospy.get_name()
         rospy.loginfo("-I- %s started" % self.nodename)  #10260
         
-        self.l = False
-        self.r = False
-        self.f = False
-        self.b = False
-        self.s = False
-        
         # subscribers
         rospy.Subscriber("app/S", Bool, self.S_callBack)
         rospy.Subscriber("app/L", Bool, self.L_callBack)
@@ -30,7 +25,8 @@ class navigator_teleop_phone():
         rospy.Subscriber("app/B", Bool, self.B_callBack)
         
         # publishers
-        self.controlPub = rospy.Publisher("motors/control", String, queue_size = 10)
+        self.left_pwm_pub = rospy.Publisher("motors/pwm/lwheel", Int16, queue_size = 10)
+        self.right_pwm_pub = rospy.Publisher("motors/pwm/rwheel", Int16, queue_size = 10)
         
     #############################################################
     def spin(self):
@@ -39,29 +35,47 @@ class navigator_teleop_phone():
             rospy.spin()
 
     #############################################################
+    def send(self, l, r):
+    #############################################################
+        self.left_pwm_pub.publish(l)
+        self.right_pwm_pub.publish(r)
+    
+    #############################################################
     def S_callBack(self,msg):
     #############################################################
-        self.controlPub.publish("S")
+        self.send(0, 0)
         
     #############################################################
     def F_callBack(self,msg):
     #############################################################
-        self.controlPub.publish("S" if not msg.data else "F")
-        
+        if not msg.data:
+            self.send(0, 0)
+        else:
+            self.send(128, 128)
+            
     #############################################################
     def B_callBack(self,msg):
     #############################################################
-        self.controlPub.publish("S" if not msg.data else "B")
+        if not msg.data:
+            self.send(0, 0)
+        else:
+            self.send(-128, -128)
         
     #############################################################
     def L_callBack(self,msg):
     #############################################################
-        self.controlPub.publish("S" if not msg.data else "L")
+        if not msg.data:
+            self.send(0, 0)
+        else:
+            self.send(-128, 128)
         
     #############################################################
     def R_callBack(self,msg):
     #############################################################
-        self.controlPub.publish("S" if not msg.data else "R")
+        if not msg.data:
+            self.send(0, 0)
+        else:
+            self.send(128, -128)
         
 #############################################################
 #############################################################
