@@ -54,7 +54,7 @@ rosrun map_server map_saver -f ~/project/src/Self_Navigating_Bot/navigator_navig
 
 ### Autonomous Navigation
 ```bash
-# open two terminals
+# open three terminals
 cd ~/project
 
 # source the terminals
@@ -65,11 +65,14 @@ roslaunch navigator_bringup robot_standalone.launch
 
 # Terminal 2
 roslaunch navigator_navigation auto.launch
+
+# Terminal 3
+roslaunch navigator_bringup view_navigation.launch
 ```
 
 ### Simultaneous Mapping and Autonomous Navigation
 ```bash
-# open two terminals
+# open three terminals
 cd ~/project
 
 # source all the terminals
@@ -80,4 +83,7 @@ roslaunch navigator_bringup robot_standalone.launch
 
 # Terminal 2
 roslaunch navigator_navigation sman.launch
+
+# Terminal 3
+roslaunch navigator_bringup view_navigation.launch
 ```

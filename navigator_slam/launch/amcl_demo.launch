@@ -13,7 +13,7 @@
   </include>
 
   <!-- Map server -->
-  <arg  name="map_file"   default="$(find navigator_navigation)/maps/mymap.yaml"/> 
+  <arg  name="map_file"   default="$(find navigator_navigation)/maps/mymap1.yaml"/> 
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
   <!-- AMCL -->

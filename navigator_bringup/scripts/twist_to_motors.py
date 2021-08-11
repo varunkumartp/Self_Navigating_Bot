@@ -4,7 +4,7 @@
 
 import math
 import rospy
-from std_msgs.msg import Float32
+from std_msgs.msg import Int16
 from geometry_msgs.msg import Twist 
 
 #############################################################
@@ -20,8 +20,8 @@ class TwistToMotors():
         
         self.w = rospy.get_param("~base_width", 0.24)
     
-        self.pub_lmotor = rospy.Publisher('motors/vtarget/lwheel', Float32,queue_size=10)
-        self.pub_rmotor = rospy.Publisher('motors/vtarget/rwheel', Float32,queue_size=10)
+        self.pub_lmotor = rospy.Publisher('motors/vtarget/lwheel', Int16,queue_size=10)
+        self.pub_rmotor = rospy.Publisher('motors/vtarget/rwheel', Int16,queue_size=10)
         rospy.Subscriber('/cmd_vel', Twist, self.twistCallback)
     
         self.dia = rospy.get_param("~diametre",0.066)
@@ -56,8 +56,8 @@ class TwistToMotors():
         self.right = self.dx + self.dr * self.w / 2 
         self.left = self.dx - self.dr * self.w / 2
         #rospy.loginfo("velocity = (%f, %f)", self.left, self.right)
-        self.left = self.left * 60 / ( self.dia * math.pi )
-        self.right = self.right * 60 / ( self.dia * math.pi )
+        self.left = int(self.left * 60 / ( self.dia * math.pi ))
+        self.right = int(self.right * 60 / ( self.dia * math.pi ))
         #rospy.loginfo("RPM = (%d, %d)", self.left, self.right)       
         self.pub_lmotor.publish(self.left)
         self.pub_rmotor.publish(self.right)

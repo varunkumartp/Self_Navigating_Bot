@@ -10,7 +10,4 @@
   <!-- Move Base node   -->
   <include file="$(find navigator_navigation)/launch/move_base.launch"/>
 
-  <!-- RVIZ -->
-  <node pkg="rviz" name="rviz" type="rviz" args="-d $(find navigator_slam)/rviz/robot_mapping.rviz" output="log"/>  
-
 </launch>

@@ -4,10 +4,9 @@
 #include <MechaQMC5883.h>
 #include <rosnano.h>
 #include <std_msgs/Int16.h>
-#include <std_msgs/Float32.h>
 
-void lwheel_callback(const std_msgs::Float32 &lvel);
-void rwheel_callback(const std_msgs::Float32 &rvel);
+void lwheel_callback(const std_msgs::Int16 &lvel);
+void rwheel_callback(const std_msgs::Int16&rvel);
 void lwheel_pwm_callback(const std_msgs::Int16 &lpwm);
 void rwheel_pwm_callback(const std_msgs::Int16 &rpwm);
 void Lencoder();
@@ -28,8 +27,8 @@ ros::Publisher rwheelPub("encoder_ticks/rwheel", &rwheelMsg);
 ros::Publisher headingPub("imu/yaw", &yaw);
 
 // Subscribers buffer 200 bytes
-ros::Subscriber<std_msgs::Float32> lwheel_vel("motors/vtarget/lwheel", &lwheel_callback );
-ros::Subscriber<std_msgs::Float32> rwheel_vel("motors/vtarget/rwheel", &rwheel_callback );
+ros::Subscriber<std_msgs::Int16> lwheel_vel("motors/vtarget/lwheel", &lwheel_callback );
+ros::Subscriber<std_msgs::Int16> rwheel_vel("motors/vtarget/rwheel", &rwheel_callback );
 ros::Subscriber<std_msgs::Int16> lwheel_pwm("motors/pwm/lwheel", &lwheel_pwm_callback );
 ros::Subscriber<std_msgs::Int16> rwheel_pwm("motors/pwm/rwheel", &rwheel_pwm_callback );
 
@@ -86,10 +85,8 @@ double le_speed_pre = 0;  //last error of speed
 double re_speed_pre = 0;  //last error of speed
 double le_speed_sum = 0;  //sum error of speed
 double re_speed_sum = 0;  //sum error of speed
-double lpwm_pulse = 0;
-double rpwm_pulse = 0;
-double lset_speed = 50;
-double rset_speed = 50;
+uint8_t lset_speed = 50;
+uint8_t rset_speed = 50;
 
 void sendPulse(int pin, int pwm_pulse)  // pwm function
 {
@@ -101,7 +98,7 @@ void sendPulse(int pin, int pwm_pulse)  // pwm function
     analogWrite(pin, 0);
 }
 
-void lwheel_callback(const std_msgs::Float32 &lvel)
+void lwheel_callback(const std_msgs::Int16 &lvel)
 {
   lset_speed = lvel.data;
   lstat = lvel.data >= 0;
@@ -110,7 +107,7 @@ void lwheel_callback(const std_msgs::Float32 &lvel)
   digitalWrite(m2, stat && lstat);
 }
 
-void rwheel_callback(const std_msgs::Float32 &rvel)
+void rwheel_callback(const std_msgs::Int16  &rvel)
 {
   rset_speed = rvel.data;
   rstat = rvel.data >= 0;
@@ -164,11 +161,8 @@ ISR(TIMER1_COMPA_vect)  // timer interrupt
     le_speed = lset_speed - lpv_speed;
     re_speed = rset_speed - rpv_speed;
 
-    lpwm_pulse = le_speed * kp + le_speed_sum * ki + (le_speed - le_speed_pre) * kd;
-    rpwm_pulse = re_speed * kp + re_speed_sum * ki + (re_speed - re_speed_pre) * kd;
-
-    sendPulse(e2, lpwm_pulse);
-    sendPulse(e1, rpwm_pulse);
+    sendPulse(e2, le_speed * kp + le_speed_sum * ki + (le_speed - le_speed_pre) * kd);
+    sendPulse(e1, re_speed * kp + re_speed_sum * ki + (re_speed - re_speed_pre) * kd);
 
     le_speed_pre = le_speed;  //save last (previous) error
     re_speed_pre = re_speed;  //save last (previous) error

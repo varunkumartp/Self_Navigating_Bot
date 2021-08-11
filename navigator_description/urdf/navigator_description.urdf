@@ -51,14 +51,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/base_link.STL" />
+        <mesh filename="package://navigator_description/meshes/base_link.STL" />
       </geometry>
       <material name="brown"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/base_link.STL" />
+        <mesh filename="package://navigator_description/meshes/base_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -77,14 +77,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/castor_studs.STL" />
+        <mesh filename="package://navigator_description/meshes/castor_studs.STL" />
       </geometry>
       <material name="silver"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/castor_studs.STL" />
+        <mesh filename="package://navigator_description/meshes/castor_studs.STL" />
       </geometry>
     </collision>
   </link>
@@ -109,7 +109,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/castor_base.STL" />
+        <mesh filename="package://navigator_description/meshes/castor_base.STL" />
       </geometry>
       <material name="">
         <color rgba="1 1 1 0.3" />
@@ -118,7 +118,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/castor_base.STL" />
+        <mesh filename="package://navigator_description/meshes/castor_base.STL" />
       </geometry>
     </collision>
   </link>
@@ -143,14 +143,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/castor.STL" />
+        <mesh filename="package://navigator_description/meshes/castor.STL" />
       </geometry>
       <material name="silver"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/castor.STL" />
+        <mesh filename="package://navigator_description/meshes/castor.STL" />
       </geometry>
     </collision>
   </link>
@@ -175,14 +175,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/l_clamp.STL" />
+        <mesh filename="package://navigator_description/meshes/l_clamp.STL" />
       </geometry>
       <material name="silver"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/l_clamp.STL" />
+        <mesh filename="package://navigator_description/meshes/l_clamp.STL" />
       </geometry>
     </collision>
   </link>
@@ -207,14 +207,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/l_motor.STL" />
+        <mesh filename="package://navigator_description/meshes/l_motor.STL" />
       </geometry>
       <material name="dark grey"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/l_motor.STL" />
+        <mesh filename="package://navigator_description/meshes/l_motor.STL" />
       </geometry>
     </collision>
   </link>
@@ -239,14 +239,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/l_shaft.STL" />
+        <mesh filename="package://navigator_description/meshes/l_shaft.STL" />
       </geometry>
       <material name="silver"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/l_shaft.STL" />
+        <mesh filename="package://navigator_description/meshes/l_shaft.STL" />
       </geometry>
     </collision>
   </link>
@@ -271,14 +271,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/l_rim.STL" />
+        <mesh filename="package://navigator_description/meshes/l_rim.STL" />
       </geometry>
       <material name="blue"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/l_rim.STL" />
+        <mesh filename="package://navigator_description/meshes/l_rim.STL" />
       </geometry>
     </collision>
   </link>
@@ -303,14 +303,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/l_wheel.STL" />
+        <mesh filename="package://navigator_description/meshes/l_wheel.STL" />
       </geometry>
       <material name="black"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/l_wheel.STL" />
+        <mesh filename="package://navigator_description/meshes/l_wheel.STL" />
       </geometry>
     </collision>
   </link>
@@ -335,14 +335,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/r_clamp.STL" />
+        <mesh filename="package://navigator_description/meshes/r_clamp.STL" />
       </geometry>
       <material name="silver"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/r_clamp.STL" />
+        <mesh filename="package://navigator_description/meshes/r_clamp.STL" />
       </geometry>
     </collision>
   </link>
@@ -367,14 +367,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/r_motor.STL" />
+        <mesh filename="package://navigator_description/meshes/r_motor.STL" />
       </geometry>
       <material name="dark grey"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/r_motor.STL" />
+        <mesh filename="package://navigator_description/meshes/r_motor.STL" />
       </geometry>
     </collision>
   </link>
@@ -399,14 +399,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/r_shaft.STL" />
+        <mesh filename="package://navigator_description/meshes/r_shaft.STL" />
       </geometry>
       <material name="silver"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/r_shaft.STL" />
+        <mesh filename="package://navigator_description/meshes/r_shaft.STL" />
       </geometry>
     </collision>
   </link>
@@ -431,14 +431,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/r_rim.STL" />
+        <mesh filename="package://navigator_description/meshes/r_rim.STL" />
       </geometry>
       <material name="blue"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/r_rim.STL" />
+        <mesh filename="package://navigator_description/meshes/r_rim.STL" />
       </geometry>
     </collision>
   </link>
@@ -463,14 +463,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/r_wheel.STL" />
+        <mesh filename="package://navigator_description/meshes/r_wheel.STL" />
       </geometry>
       <material name="black"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/r_wheel.STL" />
+        <mesh filename="package://navigator_description/meshes/r_wheel.STL" />
       </geometry>
     </collision>
   </link>
@@ -495,14 +495,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/4cm_studs.STL" />
+        <mesh filename="package://navigator_description/meshes/4cm_studs.STL" />
       </geometry>
       <material name="silver"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/4cm_studs.STL" />
+        <mesh filename="package://navigator_description/meshes/4cm_studs.STL" />
       </geometry>
     </collision>
   </link>
@@ -527,14 +527,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/upper_plate.STL" />
+        <mesh filename="package://navigator_description/meshes/upper_plate.STL" />
       </geometry>
       <material name="wood"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/upper_plate.STL" />
+        <mesh filename="package://navigator_description/meshes/upper_plate.STL" />
       </geometry>
     </collision>
   </link>
@@ -559,14 +559,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/black_plate_small.STL" />
+        <mesh filename="package://navigator_description/meshes/black_plate_small.STL" />
       </geometry>
       <material name="black"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/black_plate_small.STL" />
+        <mesh filename="package://navigator_description/meshes/black_plate_small.STL" />
       </geometry>
     </collision>
   </link>
@@ -591,14 +591,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/6cm_studs.STL" />
+        <mesh filename="package://navigator_description/meshes/6cm_studs.STL" />
       </geometry>
       <material name="silver"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/6cm_studs.STL" />
+        <mesh filename="package://navigator_description/meshes/6cm_studs.STL" />
       </geometry>
     </collision>
   </link>
@@ -623,14 +623,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/black_plate_big.STL" />
+        <mesh filename="package://navigator_description/meshes/black_plate_big.STL" />
       </geometry>
       <material name="black"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/black_plate_big.STL" />
+        <mesh filename="package://navigator_description/meshes/black_plate_big.STL" />
       </geometry>
     </collision>
   </link>
@@ -655,14 +655,14 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/kinect.STL" />
+        <mesh filename="package://navigator_description/meshes/kinect.STL" />
       </geometry>
       <material name="grey"/>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://navigator_bringup/meshes/kinect.STL" />
+        <mesh filename="package://navigator_description/meshes/kinect.STL" />
       </geometry>
     </collision>
   </link>

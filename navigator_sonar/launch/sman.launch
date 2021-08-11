@@ -2,12 +2,9 @@
 <launch>
   
   <!-- Mapping -->
-  <include file="$(find navigator_slam)/launch/mapping.launch"/>
+  <include file="$(find navigator_slam)/launch/slam.launch"/>
 
   <!-- Move Base node   -->
   <include file="$(find navigator_sonar)/launch/move_base.launch"/>
-
-  <!-- RVIZ -->
-  <node pkg="rviz" name="rviz" type="rviz" args="-d $(find navigator_sonar)/rviz/robot_mapping.rviz" output="log"/>  
 
 </launch>
