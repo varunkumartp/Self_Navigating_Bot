@@ -1,6 +1,6 @@
 # Self-Navigating Bot
-Open source Self-Navigating Bot implemented in ROS using Kinect sensor.
 ![Navigator](https://github.com/varunkumartp/Self_Navigating_Bot/blob/master/Images/Self_navigating_bot.jpeg)
+Open source Self-Navigating Bot implemented in ROS using Kinect sensor.
 ## Prerequisites
 Install the [ROS Noetic](http://wiki.ros.org/noetic/Installation/Ubuntu) framework for Ubuntu 20.04.
 
